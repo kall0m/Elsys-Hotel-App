@@ -12,6 +12,12 @@ public class HomeController {
         model.addAttribute("view", "home/index");
         return "base-layout";
     }
+    @GetMapping("/about")
+    public String aboutUs(Model model)
+    {
+        model.addAttribute("view", "home/about");
+        return "base-layout";
+    }
 }
 
 

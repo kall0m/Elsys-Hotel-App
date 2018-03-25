@@ -1,7 +1,7 @@
-package healthblog.services;
+package hotelapp.services;
 
-import healthblog.models.Role;
-import healthblog.repositories.RoleRepository;
+import hotelapp.models.Role;
+import hotelapp.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

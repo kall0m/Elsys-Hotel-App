@@ -1,6 +1,6 @@
-package healthblog.services;
+package hotelapp.services;
 
-import healthblog.models.Role;
+import hotelapp.models.Role;
 
 public interface RoleService {
     Role findRole(String name);

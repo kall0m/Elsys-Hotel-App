@@ -1,0 +1,55 @@
+<header id="header" th:fragment="header" th:remove="tag">
+    <div id="nav-holder">
+        <nav>
+            <div class="fonts-display clearfix">
+                <div class="dropdown">
+                    <p class="text-left alpha">
+                        <a th:href="@{/fitness}">Fitness</a>
+                    </p>
+                    <div class="dropdown-content alpha">
+                        <a th:href="@{/fitness/challenges}">Challenges</a>
+                        <a th:href="@{/fitness/exercises}">Exercises</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <p class="text-left">
+                        <a th:href="@{/food}">Food</a>
+                    </p>
+                    <div class="dropdown-content">
+                        <a th:href="@{/food/healthy}">Healthy</a>
+                        <a th:href="@{/food/desserts}">Desserts</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <p class="text-left">
+                        <a th:href="@{/lifestyle}">Lifestyle</a>
+                    </p>
+                    <div class="dropdown-content">
+                        <a th:href="@{/lifestyle/wear-it-better}">Wear it better</a>
+                        <a th:href="@{/lifestyle/motivation}">Motivation</a>
+                    </div>
+                </div>
+                <p class="logo-holder">
+                    <a th:href="@{/}" title="HealthBlog">
+                        <img th:src="@{/img/logo.png}" alt="HealthBlog"/>
+                    </a>
+                </p>
+                <p class="text-right">
+                    <a th:href="@{/}">Home</a>
+                </p>
+                <div class="dropdown">
+                    <p class="text-right">
+                        <a th:href="@{/about}">About Me</a>
+                    </p>
+                    <div class="dropdown-content">
+                        <a th:href="@{/about/my-transformation}">My Transformation</a>
+                        <a th:href="@{/about/me-myself-and-i}">Me, Myself &amp; I</a>
+                    </div>
+                </div>
+                <p class="text-right omega">
+                    <a th:href="@{/contact}">Contact Me</a>
+                </p>
+            </div>
+        </nav>
+    </div>
+</header>

@@ -1,5 +1,6 @@
 package hotelapp.controllers;
 
+import hotelapp.bindingModels.UserBindingModel;
 import hotelapp.models.Role;
 import hotelapp.models.User;
 import hotelapp.services.RoleService;

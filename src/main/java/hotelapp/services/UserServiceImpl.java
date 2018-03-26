@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service("userService")
-public class UserServiceStubImpl implements UserService {
+public class UserServiceImpl implements UserService {
     @Override
     public boolean authenticate(String username, String password) {
         // Provide a sample password check: username == password
@@ -19,21 +19,13 @@ public class UserServiceStubImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    public UserServiceStubImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-    /*public User findByConfirmationToken(String confirmationToken) {
-        return userRepository.findByConfirmationToken(confirmationToken);
-    }
-
-    public User findByForgotPasswordToken(String forgotPasswordToken) {
-        return userRepository.findByForgotPasswordToken(forgotPasswordToken);
-    }*/
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

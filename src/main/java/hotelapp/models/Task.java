@@ -11,13 +11,20 @@ public class Task {
 
     private String description;
 
-    private User user;
+    private Boss assignor;
 
-    public Task(Integer id, String description, User user) {
-        this.id = id;
+    private Worker worker;
+
+    private Board board;
+
+    public Task(String description, Boss assignor, Worker worker, Board board) {
         this.description = description;
-        this.user = user;
+        this.assignor = assignor;
+        this.worker = worker;
+        this.board = board;
     }
+
+    public Task() {    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +46,32 @@ public class Task {
     }
 
     @ManyToOne()
-    @JoinColumn(nullable = false, name = "userId")
-    public User getUser() {
-        return user;
+    @JoinColumn(nullable = false, name = "assignorId")
+    public Boss getAssignor() {
+        return assignor;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAssignor(Boss assignor) {
+        this.assignor = assignor;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "workerId")
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "boardId")
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }

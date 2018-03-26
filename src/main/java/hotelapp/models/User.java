@@ -7,8 +7,9 @@ import java.util.TreeSet;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 public class User {
-
     private Integer id;
 
     private String email;
@@ -19,15 +20,18 @@ public class User {
 
     private Set<Role> roles;
 
-    private Set<Task> tasks;
+    //private Set<Task> tasks;
+
+    //private Set<Board> boards;
 
     public User(String email, String fullName, String password) {
         this.email = email;
-        this.password = password;
         this.fullName = fullName;
+        this.password = password;
 
         this.roles = new HashSet<>();
-        this.tasks = new HashSet<>();
+        //this.tasks = new HashSet<>();
+        //this.boards = new HashSet<>();
     }
 
     public User() {    }
@@ -83,12 +87,23 @@ public class User {
         this.roles.add(role);
     }
 
-    @OneToMany(mappedBy = "user")
+    /*@OneToMany(mappedBy = "user")
     public Set<Task> getTasks() {
         return tasks;
     }
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }*/
+
+    /*@ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "boards_workers")
+    @OneToMany(mappedBy = "user")
+    public Set<Board> getBoards() {
+        return boards;
     }
+
+    public void setBoards(Set<Board> boards) {
+        this.boards = boards;
+    }*/
 }

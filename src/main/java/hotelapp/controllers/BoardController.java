@@ -3,8 +3,10 @@ package hotelapp.controllers;
 import hotelapp.bindingModels.BoardBindingModel;
 import hotelapp.models.Board;
 import hotelapp.models.Boss;
+import hotelapp.models.Task;
+import hotelapp.repositories.BossRepository;
 import hotelapp.services.BoardService;
-import hotelapp.services.UserService;
+import hotelapp.services.BossService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -23,12 +26,13 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
     @Autowired
-    private UserService userService;
+    private BossService bossService;
 
     @GetMapping("/boards")
+    @PreAuthorize("isAuthenticated()")
     public String boards(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Boss user = (Boss) this.userService.findByEmail(principal.getUsername());
+        Boss user = this.bossService.findByEmail(principal.getUsername());
 
         List<Board> boards = new ArrayList<>(user.getBoards());
 
@@ -50,11 +54,11 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     public String createProcess(BoardBindingModel boardBindingModel, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "redirect:/user/{id}/boards/create";
+            return "redirect:/boards/create";
         }
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Boss user = (Boss) this.userService.findByEmail(principal.getUsername());
+        Boss user = this.bossService.findByEmail(principal.getUsername());
 
         Board board = new Board(
                 boardBindingModel.getName(),
@@ -64,6 +68,24 @@ public class BoardController {
 
         this.boardService.saveBoard(board);
 
-        return "redirect:/user/{id}/boards";
+        return "redirect:/boards";
+    }
+
+    @GetMapping("/boards/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String details(@PathVariable Integer id, Model model) {
+        if(!this.boardService.boardExists(id)) {
+            return "redirect:/boards";
+        }
+
+        Board board = this.boardService.findBoard(id);
+
+        List<Task> tasks = new ArrayList<>(board.getTasks());
+
+        model.addAttribute("board", board);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("view", "board/details");
+
+        return "base-layout";
     }
 }

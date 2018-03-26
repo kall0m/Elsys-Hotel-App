@@ -34,6 +34,9 @@
                                 <a th:href="@{/boards}">Boards</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
+                                <a th:href="@{/boards/new}">New Board</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/logout}">Logout</a>
                             </li>
                             <li sec:authorize="isAnonymous()">

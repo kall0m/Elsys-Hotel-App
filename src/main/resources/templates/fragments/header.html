@@ -1,55 +1,79 @@
-<header id="header" th:fragment="header" th:remove="tag">
-    <div id="nav-holder">
-        <nav>
-            <div class="fonts-display clearfix">
-                <div class="dropdown">
-                    <p class="text-left alpha">
-                        <a th:href="@{/fitness}">Fitness</a>
-                    </p>
-                    <div class="dropdown-content alpha">
-                        <a th:href="@{/fitness/challenges}">Challenges</a>
-                        <a th:href="@{/fitness/exercises}">Exercises</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <p class="text-left">
-                        <a th:href="@{/food}">Food</a>
-                    </p>
-                    <div class="dropdown-content">
-                        <a th:href="@{/food/healthy}">Healthy</a>
-                        <a th:href="@{/food/desserts}">Desserts</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <p class="text-left">
-                        <a th:href="@{/lifestyle}">Lifestyle</a>
-                    </p>
-                    <div class="dropdown-content">
-                        <a th:href="@{/lifestyle/wear-it-better}">Wear it better</a>
-                        <a th:href="@{/lifestyle/motivation}">Motivation</a>
-                    </div>
-                </div>
-                <p class="logo-holder">
-                    <a th:href="@{/}" title="HealthBlog">
-                        <img th:src="@{/img/logo.png}" alt="HealthBlog"/>
+<header th:fragment="header" th:remove="tag">
+    <div class="container nav-stack">
+        <div class="row">
+            <div class="nav-stack__upper">
+                <div class="col-xs-6">
+                    <a href="index.html">
+                        <img alt="logo" class="logo" src="img/logo-large-dark.png">
                     </a>
-                </p>
-                <p class="text-right">
-                    <a th:href="@{/}">Home</a>
-                </p>
-                <div class="dropdown">
-                    <p class="text-right">
-                        <a th:href="@{/about}">About Me</a>
-                    </p>
-                    <div class="dropdown-content">
-                        <a th:href="@{/about/my-transformation}">My Transformation</a>
-                        <a th:href="@{/about/me-myself-and-i}">Me, Myself &amp; I</a>
-                    </div>
                 </div>
-                <p class="text-right omega">
-                    <a th:href="@{/contact}">Contact Me</a>
-                </p>
+                <div class="col-xs-6 text-right">
+                    <a href="#purchase-template" class="btn btn--sm btn--square">
+		                            <span class="btn__text">
+		                                Purchase Now
+		                            </span>
+                    </a>
+                </div>
             </div>
-        </nav>
-    </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="nav-bar">
+                    <div class="nav-module logo-module left">
+                        <a href="index.html">
+                            <img class="logo logo-dark" alt="logo" src="img/logo-dark.png">
+                            <img class="logo logo-light" alt="logo" src="img/logo-light.png">
+                        </a>
+                    </div>
+                    <div class="nav-module menu-module left">
+                        <ul class="menu">
+                            <li>
+                                <a href="#">Single</a>
+                            </li>
+                            <li>
+                                <a href="#">Dropdown</a>
+                                <ul>
+                                    <li>
+                                        <a href="#">Single</a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#">Dropdown</a>
+                                        <ul>
+                                            <li>
+                                                <a href="#">Single</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Multi Column</a>
+                                <ul class="multi-column">
+                                    <li>
+                                        <ul>
+                                            <li><span class="multi-column__title">Title</span></li>
+                                            <li>
+                                                <a href="#">Single</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul>
+                                            <li><span class="multi-column__title">Title</span></li>
+                                            <li>
+                                                <a href="#">Single</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="nav-mobile-toggle visible-sm visible-xs">
+                    <i class="icon-Align-Right icon icon--sm"></i>
+                </div>
+            </div></div></div>
 </header>

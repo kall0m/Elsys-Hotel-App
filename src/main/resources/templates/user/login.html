@@ -14,13 +14,13 @@
                     <br/> hand-crafted web components
                 </p>
                 <div class="text-left">
-                    <form method="post">
+                    <form method="post" th:action="@{/login}">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="input-with-icon">
                                     <label>Username:</label>
                                     <i class="icon icon-Male-2"></i>
-                                    <input type="text" name="name" placeholder="Username"/>
+                                    <input type="text" name="email" placeholder="Username"/>
                                 </div>
                             </div>
                         </div>
@@ -33,15 +33,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <div class="input-checkbox">
-                                    <div class="inner"></div>
-                                    <input type="checkbox"/>
-                                </div>
-                                <span class="type--fine-print">Keep me logged in</span>
-                            </div>
-                        </div>
+
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
                         <div class="row">
                             <div class="col-sm-12">
                                 <button type="submit" class="btn btn--primary vpe">Login</button>

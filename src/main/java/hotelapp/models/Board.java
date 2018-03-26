@@ -19,7 +19,7 @@ public class Board {
 
     private Set<Task> tasks;
 
-    public Board(String name, String description, Boss creator, Set<Worker> workers, Set<Task> tasks) {
+    public Board(String name, String description, Boss creator) {
         this.name = name;
         this.description = description;
         this.creator = creator;

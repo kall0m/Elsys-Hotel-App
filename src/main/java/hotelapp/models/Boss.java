@@ -14,7 +14,7 @@ public class Boss extends User {
 
     private Set<Board> boards;
 
-    public Boss(String email, String fullName, String password, Set<Task> tasks, Set<Board> boards) {
+    public Boss(String email, String fullName, String password) {
         super(email, fullName, password);
         this.tasks = new HashSet<>();
         this.boards = new HashSet<>();

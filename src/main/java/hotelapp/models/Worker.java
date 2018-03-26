@@ -1,6 +1,7 @@
 package hotelapp.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,13 +13,13 @@ public class Worker extends User {
 
     public Worker(String email, String fullName, String password, Set<Task> tasks, Set<Board> boards) {
         super(email, fullName, password);
-        this.tasks = tasks;
-        this.boards = boards;
+        this.tasks = new HashSet<>();
+        this.boards = new HashSet<>();
     }
 
     public Worker(Set<Task> tasks, Set<Board> boards) {
-        this.tasks = tasks;
-        this.boards = boards;
+        this.tasks = new HashSet<>();
+        this.boards = new HashSet<>();
     }
 
     public Worker() {    }

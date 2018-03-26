@@ -21,6 +21,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    public boolean userExists(Integer id) {
+        return userRepository.exists(id);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

@@ -10,12 +10,6 @@ import java.util.Objects;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
-    @Override
-    public boolean authenticate(String username, String password) {
-        // Provide a sample password check: username == password
-        return Objects.equals(username, password);
-    }
-
     private UserRepository userRepository;
 
     @Autowired

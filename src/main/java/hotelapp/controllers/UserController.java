@@ -38,4 +38,28 @@ public class UserController {
 
         return "base-layout";
     }
+
+    @PostMapping("/register")
+    public String registerProcess(UserBindingModel userBindingModel){
+
+        if(!userBindingModel.getPassword().equals(userBindingModel.getConfirmPassword())){
+            return "redirect:/register";
+        }
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        User user = new User(
+                userBindingModel.getEmail(),
+                userBindingModel.getFullName(),
+                bCryptPasswordEncoder.encode(userBindingModel.getPassword())
+        );
+
+        Role userRole = this.roleService.findRole("ROLE_USER");
+
+        user.addRole(userRole);
+
+        this.userService.saveUser(user);
+
+        return "redirect:/login";
+    }
 }

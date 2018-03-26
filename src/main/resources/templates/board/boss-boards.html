@@ -1,0 +1,26 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="bg--secondary">
+            <div class="container">
+                <div class="row">
+                    <div class="masonry">
+                        <div class="masonry__container masonry--active">
+                            <th:block th:each="board : ${boards}">
+                                <div class="col-sm-4 masonry__item">
+                                    <a th:href="@{/boards/{id}(id=${board.id})}">
+                                        <div class="boxed bg--white box-shadow">
+                                            <span>Board</span>
+                                            <h5 th:text="${board.name}"></h5>
+                                            <hr/>
+                                            <p th:text="${board.description}"></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

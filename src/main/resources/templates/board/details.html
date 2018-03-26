@@ -1,0 +1,33 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="bg--secondary">
+            <div class="container">
+                <div class="row">
+                    <h1 th:text="${board.name}"></h1>
+                    <h5 th:text="${board.description}"></h5>
+                    <div class="masonry">
+                        <div class="masonry__container masonry--active">
+                            <th:block th:each="task : ${tasks}">
+                                <div class="col-sm-4 masonry__item">
+                                    <a th:href="@{/boards/{id}/tasks/{id2}(id=${board.id})(id2=${task.id})}">
+                                        <div class="boxed bg--white box-shadow">
+                                            <span>Task</span>
+                                            <hr/>
+                                            <p th:text="${task.description}"></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 text-center">
+                        <a th:href="@{boards/{id}/tasks/create}">
+                            <button type="button" class="btn bg--dark">Add task</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

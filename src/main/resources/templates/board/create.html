@@ -1,0 +1,48 @@
+<main th:remove = "tag">
+    <div class="main-container">
+        <section class="height-100 cover cover-8">
+            <div class="col-md-7 col-sm-5">
+                <div class="background-image-holder">
+                    <img alt="image" src="/img/hero13.jpg"/>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-7 bg--white text-center">
+                <div class="pos-vertical-center">
+                    <img class="logo" alt="Pillar" src="/img/logo-large-dark.png"/>
+                    <p class="lead">
+                        A beautiful collection of
+                        <br/> hand-crafted web components
+                    </p>
+                    <div class="text-left">
+                        <form method="post" th:action="@{/boards/create}">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Name:</label>
+                                        <i class="icon icon-Male-2"></i>
+                                        <input type="text" name="name" placeholder="Name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Description:</label>
+                                        <i class="icon icon-Security-Check"></i>
+                                        <input type="text" name="description" placeholder="Description"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn--primary vpe">Create</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

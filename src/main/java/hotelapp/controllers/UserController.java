@@ -42,7 +42,6 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerProcess(UserBindingModel userBindingModel){
-
         if(!userBindingModel.getPassword().equals(userBindingModel.getConfirmPassword())){
             return "redirect:/register";
         }
@@ -62,5 +61,12 @@ public class UserController {
         this.userService.saveUser(user);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+        model.addAttribute("view", "user/login");
+
+        return "base-layout";
     }
 }

@@ -33,6 +33,9 @@
                             <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/boards}">Boards</a>
                             </li>
+                            <li sec:authorize="isAuthenticated()">
+                                <a th:href="@{/logout}">Logout</a>
+                            </li>
                             <li sec:authorize="isAnonymous()">
                                 <a th:href="@{/register}">Register</a>
                             </li>
@@ -41,11 +44,11 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
-
                 <div class="nav-mobile-toggle visible-sm visible-xs">
                     <i class="icon-Align-Right icon icon--sm"></i>
                 </div>
-            </div></div></div>
+            </div>
+        </div>
+    </div>
 </header>

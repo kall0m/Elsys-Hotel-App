@@ -76,6 +76,10 @@ public class Board {
         this.workers = workers;
     }
 
+    public void addWorker(Worker worker) {
+        this.workers.add(worker);
+    }
+
     @OneToMany(mappedBy = "board")
     public Set<Task> getTasks() {
         return tasks;

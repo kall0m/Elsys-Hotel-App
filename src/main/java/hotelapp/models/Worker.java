@@ -42,4 +42,8 @@ public class Worker extends User {
     public void setBoards(Set<Board> boards) {
         this.boards = boards;
     }
+
+    public void addBoard(Board board) {
+        this.boards.add(board);
+    }
 }

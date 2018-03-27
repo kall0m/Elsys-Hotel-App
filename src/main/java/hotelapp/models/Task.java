@@ -17,11 +17,8 @@ public class Task {
 
     private Board board;
 
-    public Task(String description, Boss assignor, Worker worker, Board board) {
+    public Task(String description) {
         this.description = description;
-        this.assignor = assignor;
-        this.worker = worker;
-        this.board = board;
     }
 
     public Task() {    }

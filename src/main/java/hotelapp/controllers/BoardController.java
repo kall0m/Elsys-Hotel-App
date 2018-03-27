@@ -4,9 +4,10 @@ import hotelapp.bindingModels.BoardBindingModel;
 import hotelapp.models.Board;
 import hotelapp.models.Boss;
 import hotelapp.models.Task;
-import hotelapp.repositories.BossRepository;
+import hotelapp.models.Worker;
 import hotelapp.services.BoardService;
 import hotelapp.services.BossService;
+import hotelapp.services.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,14 +28,24 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private BossService bossService;
+    @Autowired
+    private WorkerService workerService;
 
     @GetMapping("/boards")
     @PreAuthorize("isAuthenticated()")
     public String boards(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Boss user = this.bossService.findByEmail(principal.getUsername());
 
-        List<Board> boards = new ArrayList<>(user.getBoards());
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+        Worker worker = this.workerService.findByEmail(principal.getUsername());
+
+        List<Board> boards = new ArrayList<>();
+
+        if(boss != null) {
+            boards = new ArrayList<>(boss.getBoards());
+        } else if(worker != null) {
+            boards = new ArrayList<>(worker.getBoards());
+        }
 
         model.addAttribute("boards", boards);
         model.addAttribute("view", "board/boss-boards");
@@ -45,6 +56,9 @@ public class BoardController {
     @GetMapping("/boards/create")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model) {
+        List<Worker> workers = this.workerService.getAllWorkers();
+
+        model.addAttribute("workers", workers);
         model.addAttribute("view", "board/create");
 
         return "base-layout";
@@ -65,6 +79,19 @@ public class BoardController {
                 boardBindingModel.getDescription(),
                 user
         );
+
+        for(String w : boardBindingModel.getWorkers()) {
+            Worker worker = this.workerService.findByEmail(w);
+
+            if(worker == null) {
+                return "redirect:/boards/create";
+            }
+
+            board.addWorker(worker);
+            worker.addBoard(board);
+
+            //this.workerService.saveWorker(worker);
+        }
 
         this.boardService.saveBoard(board);
 

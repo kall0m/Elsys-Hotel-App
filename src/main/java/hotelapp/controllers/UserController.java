@@ -1,8 +1,10 @@
 package hotelapp.controllers;
 
 import hotelapp.bindingModels.UserBindingModel;
+import hotelapp.models.Boss;
 import hotelapp.models.Role;
 import hotelapp.models.User;
+import hotelapp.services.BossService;
 import hotelapp.services.RoleService;
 import hotelapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
+    @Autowired
+    private BossService bossService;
 
     @Autowired
     public UserController(UserService userService, RoleService roleService) {
@@ -48,7 +52,7 @@ public class UserController {
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-        User user = new User(
+        Boss boss = new Boss(
                 userBindingModel.getEmail(),
                 userBindingModel.getFullName(),
                 bCryptPasswordEncoder.encode(userBindingModel.getPassword())
@@ -56,9 +60,9 @@ public class UserController {
 
         Role userRole = this.roleService.findRole("ROLE_USER");
 
-        user.addRole(userRole);
+        boss.addRole(userRole);
 
-        this.userService.saveUser(user);
+        this.bossService.saveBoss(boss);
 
         return "redirect:/login";
     }

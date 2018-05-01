@@ -17,11 +17,6 @@ public class Worker extends User {
         this.boards = new HashSet<>();
     }
 
-    public Worker(Set<Task> tasks, Set<Board> boards) {
-        this.tasks = new HashSet<>();
-        this.boards = new HashSet<>();
-    }
-
     public Worker() {    }
 
     @OneToMany(mappedBy = "worker")

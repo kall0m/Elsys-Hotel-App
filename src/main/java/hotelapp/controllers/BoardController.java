@@ -72,12 +72,16 @@ public class BoardController {
         }
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Boss user = this.bossService.findByEmail(principal.getUsername());
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(boss == null) {
+            return "redirect:/boards/create";
+        }
 
         Board board = new Board(
                 boardBindingModel.getName(),
                 boardBindingModel.getDescription(),
-                user
+                boss
         );
 
         for(String w : boardBindingModel.getWorkers()) {

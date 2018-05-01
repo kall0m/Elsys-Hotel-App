@@ -1,6 +1,5 @@
 package hotelapp.controllers;
 
-import hotelapp.bindingModels.BoardBindingModel;
 import hotelapp.bindingModels.TaskBindingModel;
 import hotelapp.models.Board;
 import hotelapp.models.Boss;

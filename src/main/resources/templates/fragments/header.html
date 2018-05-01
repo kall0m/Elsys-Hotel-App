@@ -30,6 +30,9 @@
                                 <a th:href="@{/boards/create}">New Board</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
+                                <a th:href="@{/worker/generate-account}">Generate Account</a>
+                            </li>
+                            <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/logout}">Logout</a>
                             </li>
                             <li sec:authorize="isAnonymous()">

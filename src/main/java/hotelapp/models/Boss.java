@@ -1,9 +1,6 @@
 package hotelapp.models;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,15 +11,15 @@ public class Boss extends User {
 
     private Set<Board> boards;
 
-    public Boss(String email, String fullName, String password) {
+    private double subscription;
+
+    private int workerAccounts;
+
+    public Boss(String email, String fullName, String password, double subscription) {
         super(email, fullName, password);
         this.tasks = new HashSet<>();
         this.boards = new HashSet<>();
-    }
-
-    public Boss(Set<Task> tasks, Set<Board> boards) {
-        this.tasks = new HashSet<>();
-        this.boards = new HashSet<>();
+        this.subscription = subscription;
     }
 
     public Boss() {    }
@@ -43,5 +40,23 @@ public class Boss extends User {
 
     public void setBoards(Set<Board> boards) {
         this.boards = boards;
+    }
+
+    @Column(name = "subscription", nullable = false)
+    public double getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(double subscription) {
+        this.subscription = subscription;
+    }
+
+    @Column(name = "workerAccounts")
+    public int getWorkerAccounts() {
+        return workerAccounts;
+    }
+
+    public void setWorkerAccounts(int workerAccounts) {
+        this.workerAccounts = workerAccounts;
     }
 }

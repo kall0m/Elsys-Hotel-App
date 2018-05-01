@@ -66,6 +66,10 @@ public class TaskController {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
 
+        if(boss == null) {
+            return "redirect:/board/{id}/tasks/create";
+        }
+
         Board board = this.boardService.findBoard(id);
 
         Task task = new Task(

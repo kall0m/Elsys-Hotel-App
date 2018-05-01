@@ -15,6 +15,9 @@ public class UserBindingModel {
     @NotNull
     private String confirmPassword;
 
+    @NotNull
+    private double subscription;
+
     public String getEmail() {
         return email;
     }
@@ -45,5 +48,13 @@ public class UserBindingModel {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public double getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(double subscription) {
+        this.subscription = subscription;
     }
 }

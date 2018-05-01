@@ -55,7 +55,8 @@ public class UserController {
         Boss boss = new Boss(
                 userBindingModel.getEmail(),
                 userBindingModel.getFullName(),
-                bCryptPasswordEncoder.encode(userBindingModel.getPassword())
+                bCryptPasswordEncoder.encode(userBindingModel.getPassword()),
+                userBindingModel.getSubscription()
         );
 
         Role userRole = this.roleService.findRole("ROLE_USER");

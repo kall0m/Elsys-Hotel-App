@@ -11,6 +11,8 @@ public class BoardBindingModel {
 
     private List<String> workers;
 
+    private int boardsCount;
+
     public String getName() {
         return name;
     }
@@ -33,5 +35,13 @@ public class BoardBindingModel {
 
     public void setWorkers(List<String> workers) {
         this.workers = workers;
+    }
+
+    public int getBoardsCount() {
+        return boardsCount;
+    }
+
+    public void setBoardsCount(int boardsCount) {
+        this.boardsCount = boardsCount;
     }
 }

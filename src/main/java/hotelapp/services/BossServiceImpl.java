@@ -26,7 +26,15 @@ public class BossServiceImpl implements BossService {
     }
 
     public boolean checkBoardsCount(Boss boss) {
-        return boss.getBoards().size() < 10;
+        if(boss.getSubscription() == 0) {
+            return boss.getBoards().size() < 5;
+        } else if(boss.getSubscription() == 10) {
+            return boss.getBoards().size() < 8;
+        } else if(boss.getSubscription() == 20) {
+            return boss.getBoards().size() < 10;
+        }
+
+        return false;
     }
 
     public boolean checkTasksInBoardCount(Board board) {

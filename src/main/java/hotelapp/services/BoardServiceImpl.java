@@ -33,6 +33,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     public void saveBoard(Board board) {
+
+
         boardRepository.saveAndFlush(board);
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -82,9 +83,40 @@ public class BoardRestController {
 
     // -------------------Create a Board-------------------------------------------
 
+    private static final class BoardWorkers {
+        private Board board;
+        private List<String> workers;
+
+        public BoardWorkers() { }
+
+        public BoardWorkers(Board board, List<String> workers) {
+            this.board = board;
+            this.workers = workers;
+        }
+
+        public Board getBoard() {
+            return board;
+        }
+
+        public void setBoard(Board board) {
+            this.board = board;
+        }
+
+        public List<String> getWorkers() {
+            return workers;
+        }
+
+        public void setWorkers(List<String> workers) {
+            this.workers = workers;
+        }
+    }
+
     @RequestMapping(value = "/board.json/", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> createBoard(@RequestBody Board board, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> createBoard(@RequestBody BoardWorkers boardWorkers, UriComponentsBuilder ucBuilder) {
+        Board board = boardWorkers.getBoard();
+        List<String> workersEmails = boardWorkers.getWorkers();
+
         LOGGER.info("Creating Board : {}", board);
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -98,21 +130,23 @@ public class BoardRestController {
 
         board.setCreator(boss);
 
-        if(board.getWorkers() == null) {
+        if(workersEmails == null) {
             LOGGER.error("Unable to create Board {}. Not all fields filled.", board);
             return new ResponseEntity(new CustomErrorType("Unable to create Board " + board
                     + ". Not all fields filled."), HttpStatus.CONFLICT);
         }
 
-        for(Worker w : board.getWorkers()) {
-            if(this.workerService.findByEmail(w.getEmail()) == null) {
-                LOGGER.error("Unable to create Board {}. Worker {} doesn't exist.", board, w);
+        for(String email : workersEmails) {
+            Worker worker = this.workerService.findByEmail(email);
+
+            if(worker == null) {
+                LOGGER.error("Unable to create Board {}. Worker with email {} doesn't exist.", board, email);
                 return new ResponseEntity(new CustomErrorType("Unable to create Board " + board
-                        + ". Worker " + w + " doesn't exist."), HttpStatus.CONFLICT);
+                        + ". Worker with email " + email + " doesn't exist."), HttpStatus.CONFLICT);
             }
 
-            board.addWorker(w);
-            w.addBoard(board);
+            board.addWorker(worker);
+            worker.addBoard(board);
         }
 
         this.boardService.saveBoard(board);
@@ -126,7 +160,10 @@ public class BoardRestController {
 
     @RequestMapping(value = "/board/{id}.json", method = RequestMethod.PUT)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateBoard(@PathVariable("id") Integer id, @RequestBody Board board) {
+    public ResponseEntity<?> updateBoard(@PathVariable("id") Integer id, @RequestBody BoardWorkers boardWorkers) {
+        Board board = boardWorkers.getBoard();
+        List<String> workersEmails = boardWorkers.getWorkers();
+
         LOGGER.info("Updating Board with id {}", id);
 
         if(!this.boardService.boardExists(id)) {
@@ -146,11 +183,34 @@ public class BoardRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        currentBoard.setName(board.getName());
-        currentBoard.setDescription(board.getDescription());
-        currentBoard.setCreator(board.getCreator());
-        currentBoard.setTasks(board.getTasks());
-        currentBoard.setWorkers(board.getWorkers());
+        if(board.getName() != null) {
+            currentBoard.setName(board.getName());
+        }
+
+        if(board.getDescription() != null) {
+            currentBoard.setDescription(board.getDescription());
+        }
+
+        if(workersEmails != null) {
+            for(Worker w : currentBoard.getWorkers()) {
+                w.getBoards().remove(currentBoard);
+            }
+
+            currentBoard.setWorkers(new HashSet<>());
+
+            for(String email : workersEmails) {
+                Worker worker = this.workerService.findByEmail(email);
+
+                if(worker == null) {
+                    LOGGER.error("Unable to update Board {}. Worker with email {} doesn't exist.", board, email);
+                    return new ResponseEntity(new CustomErrorType("Unable to update Board " + board
+                            + ". Worker with email " + email + " doesn't exist."), HttpStatus.CONFLICT);
+                }
+
+                currentBoard.addWorker(worker);
+                worker.addBoard(currentBoard);
+            }
+        }
 
         this.boardService.saveBoard(currentBoard);
         return new ResponseEntity<Board>(currentBoard, HttpStatus.OK);

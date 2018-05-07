@@ -29,12 +29,11 @@ public class Board {
     private Set<Task> tasks;
 
     public Board() {
-        this.id = 0;
-    }
-
-    public Board(String name, String description) {
-        this.name = name;
-        this.description = description;
+        this.name = "";
+        this.description = "";
+        this.creator = null;
+        this.workers = new HashSet<>();
+        this.tasks = new HashSet<>();
     }
 
     public Board(String name, String description, Boss creator) {

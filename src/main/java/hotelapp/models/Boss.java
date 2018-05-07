@@ -1,11 +1,23 @@
 package hotelapp.models;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@XmlRootElement
 @Entity
 @DiscriminatorValue("1")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Boss extends User {
     private Set<Task> tasks;
 
@@ -42,7 +54,7 @@ public class Boss extends User {
         this.boards = boards;
     }
 
-    @Column(name = "subscription", nullable = false)
+    @Column(name = "subscription")
     public double getSubscription() {
         return subscription;
     }

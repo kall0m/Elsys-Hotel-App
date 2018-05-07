@@ -1,17 +1,22 @@
 package hotelapp.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @DiscriminatorValue("2")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Worker extends User {
     private Set<Task> tasks;
 
     private Set<Board> boards;
 
-    public Worker(String email, String fullName, String password, Set<Task> tasks, Set<Board> boards) {
+    public Worker(String email, String fullName, String password) {
         super(email, fullName, password);
         this.tasks = new HashSet<>();
         this.boards = new HashSet<>();

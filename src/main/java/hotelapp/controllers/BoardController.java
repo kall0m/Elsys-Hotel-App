@@ -8,6 +8,7 @@ import hotelapp.models.Worker;
 import hotelapp.services.BoardService;
 import hotelapp.services.BossService;
 import hotelapp.services.WorkerService;
+import hotelapp.validators.BossValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,14 +68,21 @@ public class BoardController {
     @PostMapping("/boards/create")
     @PreAuthorize("isAuthenticated()")
     public String createProcess(BoardBindingModel boardBindingModel, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/boards/create";
-        }
-
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
 
         if(boss == null) {
+            return "redirect:/boards/create";
+        }
+
+        /*BossValidator bossValidator = new BossValidator();
+        bossValidator.validate(boss, bindingResult);
+
+        if (bindingResult.hasErrors()){
+            return "redirect:/boards/create";
+        }*/
+
+        if(!this.bossService.checkBoardsCount(boss)) {
             return "redirect:/boards/create";
         }
 
@@ -83,6 +91,10 @@ public class BoardController {
                 boardBindingModel.getDescription(),
                 boss
         );
+
+        if(boardBindingModel.getWorkers() == null) {
+            return "redirect:/boards/create";
+        }
 
         for(String w : boardBindingModel.getWorkers()) {
             Worker worker = this.workerService.findByEmail(w);

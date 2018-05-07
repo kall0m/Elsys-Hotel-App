@@ -1,5 +1,6 @@
 package hotelapp.services;
 
+import hotelapp.models.Worker;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,8 @@ public class AppUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
+            throw new UsernameNotFoundException("Invalid User");
+        } else if(user instanceof Worker) {
             throw new UsernameNotFoundException("Invalid User");
         } else {
             Set<GrantedAuthority> grantedAuthorities = user.getRoles()

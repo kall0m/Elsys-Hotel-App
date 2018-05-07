@@ -70,15 +70,27 @@
 			<version>2.1.2.RELEASE</version>
 		</dependency>
 
+		<!-- Adds Tomcat and Spring MVC, along others, jackson-databind included transitively -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
+			<plugin> <!-- In order to make an executable jar[FAT JAR which includes all dependencies along with sprinboot loader] that can be executed on commandline using java -jar NAME -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>

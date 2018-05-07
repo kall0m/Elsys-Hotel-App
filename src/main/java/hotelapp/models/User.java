@@ -1,6 +1,11 @@
 package hotelapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,6 +14,9 @@ import java.util.TreeSet;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
     private Integer id;
 
@@ -20,18 +28,12 @@ public class User {
 
     private Set<Role> roles;
 
-    //private Set<Task> tasks;
-
-    //private Set<Board> boards;
-
     public User(String email, String fullName, String password) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
 
         this.roles = new HashSet<>();
-        //this.tasks = new HashSet<>();
-        //this.boards = new HashSet<>();
     }
 
     public User() {    }
@@ -86,24 +88,4 @@ public class User {
     public void addRole(Role role) {
         this.roles.add(role);
     }
-
-    /*@OneToMany(mappedBy = "user")
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }*/
-
-    /*@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "boards_workers")
-    @OneToMany(mappedBy = "user")
-    public Set<Board> getBoards() {
-        return boards;
-    }
-
-    public void setBoards(Set<Board> boards) {
-        this.boards = boards;
-    }*/
 }

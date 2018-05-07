@@ -1,11 +1,19 @@
 package hotelapp.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "boards")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Board {
     private Integer id;
 
@@ -17,7 +25,17 @@ public class Board {
 
     private Set<Worker> workers;
 
+    @JsonBackReference
     private Set<Task> tasks;
+
+    public Board() {
+        this.id = 0;
+    }
+
+    public Board(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     public Board(String name, String description, Boss creator) {
         this.name = name;
@@ -26,8 +44,6 @@ public class Board {
         this.workers = new HashSet<>();
         this.tasks = new HashSet<>();
     }
-
-    public Board() {    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,41 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="height-100 cover cover-8">
+            <div class="col-md-7 col-sm-5">
+                <div class="background-image-holder">
+                    <img alt="image" src="/img/form-bg.jpg"/>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-7 bg--white text-center">
+                <div class="pos-vertical-center">
+                    <!--<img class="logo" alt="Pillar" src="/img/logo3.jpg" style="width: 450px !important; height: 324.5px !important;"/>-->
+                    <p class="lead">
+                        Generate Accounts
+                    </p>
+                    <div class="text-left">
+                        <form method="post" th:action="@{/worker/generate-account}">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-select">
+                                        <label>Count:</label>
+                                        <select name="count" required="required">
+                                            <option value="1">1</option>
+                                            <option value="3">3</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn--primary vpe">Generate</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

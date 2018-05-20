@@ -86,6 +86,13 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
+
+		<!-- Spring Security CSRF Token Filter -->
+		<dependency>
+			<groupId>com.allanditzel</groupId>
+			<artifactId>spring-security-csrf-token-filter</artifactId>
+			<version>1.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

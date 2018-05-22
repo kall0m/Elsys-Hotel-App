@@ -12,8 +12,10 @@ import java.util.Set;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class Worker extends User {
+    @JsonIgnore
     private Set<Task> tasks;
 
+    @JsonIgnore
     private Set<Board> boards;
 
     public Worker(String email, String fullName, String password) {

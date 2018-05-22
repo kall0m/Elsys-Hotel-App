@@ -1,9 +1,6 @@
 package hotelapp.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,12 +16,16 @@ import java.util.stream.Collectors;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class Boss extends User {
+    @JsonIgnore
     private Set<Task> tasks;
 
+    @JsonIgnore
     private Set<Board> boards;
 
+    @JsonIgnore
     private double subscription;
 
+    @JsonIgnore
     private int workerAccounts;
 
     public Boss(String email, String fullName, String password, double subscription) {

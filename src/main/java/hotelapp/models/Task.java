@@ -25,11 +25,16 @@ public class Task {
 
     private Board board;
 
+    public Task() {
+        this.description = "";
+        this.assignor = null;
+        this.worker = null;
+        this.board = null;
+    }
+
     public Task(String description) {
         this.description = description;
     }
-
-    public Task() {    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +66,7 @@ public class Task {
     }
 
     @ManyToOne()
-    @JoinColumn(nullable = false, name = "workerId")
+    @JoinColumn(name = "workerId")
     public Worker getWorker() {
         return worker;
     }

@@ -1,6 +1,7 @@
 package hotelapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -22,10 +23,13 @@ public class User {
 
     private String email;
 
+    @JsonIgnore
     private String fullName;
 
+    @JsonIgnore
     private String password;
 
+    @JsonIgnore
     private Set<Role> roles;
 
     public User(String email, String fullName, String password) {

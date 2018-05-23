@@ -26,28 +26,36 @@ public class BossServiceImpl implements BossService {
     }
 
     public boolean checkBoardsCount(Boss boss) {
-        if(boss.getSubscription() == 0) {
-            return boss.getBoards().size() < 5;
-        } else if(boss.getSubscription() == 10) {
-            return boss.getBoards().size() < 8;
-        } else if(boss.getSubscription() == 20) {
-            return boss.getBoards().size() < 10;
+        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
+            return boss.getBoards().size() < SubscriptionService.FREE_BOARDS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
+            return boss.getBoards().size() < SubscriptionService.FIRST_BOARDS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
+            return boss.getBoards().size() < SubscriptionService.SECOND_BOARDS_COUNT;
         }
 
         return false;
     }
 
-    public boolean checkTasksInBoardCount(Board board) {
-        return board.getTasks().size() < 10;
+    public boolean checkTasksInBoardCount(Boss boss, Board board) {
+        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
+            return boss.getBoards().size() < SubscriptionService.FREE_TASKS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
+            return boss.getBoards().size() < SubscriptionService.FIRST_TASKS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
+            return boss.getBoards().size() < SubscriptionService.SECOND_TASKS_COUNT;
+        }
+
+        return false;
     }
 
     public boolean checkWorkerAccountsCount(Boss boss) {
-        if(boss.getSubscription() == 0) {
-            return boss.getWorkerAccounts() < 3;
-        } else if(boss.getSubscription() == 10) {
-            return boss.getWorkerAccounts() < 5;
-        } else if(boss.getSubscription() == 20) {
-            return boss.getWorkerAccounts() < 10;
+        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
+            return boss.getWorkerAccounts() < SubscriptionService.FREE_ACCS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
+            return boss.getWorkerAccounts() < SubscriptionService.FIRST_ACCS_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
+            return boss.getWorkerAccounts() < SubscriptionService.SECOND_ACCS_COUNT;
         }
 
         return false;

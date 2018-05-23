@@ -12,7 +12,7 @@ public interface BossService {
 
     boolean checkBoardsCount(Boss boss);
 
-    boolean checkTasksInBoardCount(Board board);
+    boolean checkTasksInBoardCount(Boss boss, Board board);
 
     boolean checkWorkerAccountsCount(Boss boss);
 

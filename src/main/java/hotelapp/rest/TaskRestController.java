@@ -134,7 +134,7 @@ public class TaskRestController {
                     + " not found"), HttpStatus.NOT_FOUND);
         }
 
-        if(!this.bossService.checkTasksInBoardCount(board)) {
+        if(!this.bossService.checkTasksInBoardCount(boss, board)) {
             LOGGER.error("Unable to create Task {}. Maximal task count reached. Update subscription.", task);
             return new ResponseEntity(new CustomErrorType("Unable to create Task " + task
                     + ". Maximal task count reached. Update subscription."), HttpStatus.CONFLICT);

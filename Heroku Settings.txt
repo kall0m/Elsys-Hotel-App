@@ -1,3 +1,5 @@
 winpty heroku login - login through Git Bash
 
 heroku addons:create heroku-postgresql - create postgresql database for the app
+
+heroku pg:killall -a dolores-tues - kill all connections in order to connect to the database again

@@ -21,6 +21,14 @@ public class BossServiceImpl implements BossService {
         return bossRepository.findByEmail(email);
     }
 
+    public Boss findByConfirmationToken(String confirmationToken) {
+        return this.bossRepository.findByConfirmationToken(confirmationToken);
+    }
+
+    public Boss findByForgotPasswordToken(String forgotPasswordToken) {
+        return this.bossRepository.findByForgotPasswordToken(forgotPasswordToken);
+    }
+
     public List<Boss> getAllBosses() {
         return bossRepository.findAll();
     }

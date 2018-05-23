@@ -8,6 +8,10 @@ import java.util.List;
 public interface BossService {
     Boss findByEmail(String email);
 
+    Boss findByConfirmationToken(String confirmationToken);
+
+    Boss findByForgotPasswordToken(String confirmationToken);
+
     List<Boss> getAllBosses();
 
     boolean checkBoardsCount(Boss boss);

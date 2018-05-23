@@ -30,6 +30,10 @@ public class AppUserDetailsService implements UserDetailsService {
         } else if(user instanceof Worker) {
             throw new UsernameNotFoundException("Invalid User");
         } else {
+            if(!user.isEnabled()) {
+                throw new UsernameNotFoundException("Account not enabled");
+            }
+
             Set<GrantedAuthority> grantedAuthorities = user.getRoles()
                     .stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))

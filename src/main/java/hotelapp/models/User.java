@@ -30,6 +30,15 @@ public class User {
     private String password;
 
     @JsonIgnore
+    private boolean enabled;
+
+    @JsonIgnore
+    private String confirmationToken;
+
+    @JsonIgnore
+    private String forgotPasswordToken;
+
+    @JsonIgnore
     private Set<Role> roles;
 
     public User(String email, String fullName, String password) {
@@ -77,6 +86,33 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Column(name = "enabled")
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Column(name = "confirmationToken")
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
+
+    @Column(name = "forgotPasswordToken")
+    public String getForgotPasswordToken() {
+        return forgotPasswordToken;
+    }
+
+    public void setForgotPasswordToken(String forgotPasswordToken) {
+        this.forgotPasswordToken = forgotPasswordToken;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)

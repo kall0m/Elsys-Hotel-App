@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @XmlRootElement
@@ -30,8 +28,22 @@ public class Boss extends User {
 
     public Boss(String email, String fullName, String password, double subscription) {
         super(email, fullName, password);
-        this.tasks = new HashSet<>();
-        this.boards = new HashSet<>();
+        this.tasks = new TreeSet<>(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) { //TODO
+                Integer id1 = task1.getId();
+                Integer id2 = task2.getId();
+                return id1.compareTo(id2);
+            }
+        });
+        this.boards = new TreeSet<>(new Comparator<Board>() {
+            @Override
+            public int compare(Board board1, Board board2) { //TODO
+                Integer id1 = board1.getId();
+                Integer id2 = board2.getId();
+                return id1.compareTo(id2);
+            }
+        });
         this.subscription = subscription;
     }
 

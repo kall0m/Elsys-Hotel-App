@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -32,16 +30,44 @@ public class Board {
         this.name = "";
         this.description = "";
         this.creator = null;
-        this.workers = new HashSet<>();
-        this.tasks = new HashSet<>();
+        this.workers = new TreeSet<>(new Comparator<Worker>() {
+            @Override
+            public int compare(Worker worker1, Worker worker2) { //TODO
+                Integer id1 = worker1.getId();
+                Integer id2 = worker2.getId();
+                return id1.compareTo(id2);
+            }
+        });
+        this.tasks = new TreeSet<>(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) { //TODO
+                Integer id1 = task1.getId();
+                Integer id2 = task2.getId();
+                return id1.compareTo(id2);
+            }
+        });
     }
 
     public Board(String name, String description, Boss creator) {
         this.name = name;
         this.description = description;
         this.creator = creator;
-        this.workers = new HashSet<>();
-        this.tasks = new HashSet<>();
+        this.workers = new TreeSet<>(new Comparator<Worker>() {
+            @Override
+            public int compare(Worker worker1, Worker worker2) { //TODO
+                Integer id1 = worker1.getId();
+                Integer id2 = worker2.getId();
+                return id1.compareTo(id2);
+            }
+        });
+        this.tasks = new TreeSet<>(new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) { //TODO
+                Integer id1 = task1.getId();
+                Integer id2 = task2.getId();
+                return id1.compareTo(id2);
+            }
+        });
     }
 
     @Id

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +23,26 @@ public class HomeController {
     private RoleService roleService;
     @Autowired
     private WorkerService workerService;
+
+    private static String getRandomString(int length) {
+        StringBuilder alphanumeric = new StringBuilder();
+        String alphabetCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        alphanumeric.append(alphabetCaps);
+        alphanumeric.append(alphabetCaps.toLowerCase());
+        alphanumeric.append("1234567890");
+
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+
+        while (salt.length() < length) {
+            int index = (int) (rnd.nextFloat() * alphanumeric.length());
+            salt.append(alphanumeric.charAt(index));
+        }
+
+        return salt.toString();
+
+    }
 
     @GetMapping("/")
     public String index(Model model)
@@ -52,16 +71,11 @@ public class HomeController {
         List<String> passwords = new ArrayList<>();
 
         for(int i = 0; i < generateWorkerAccountBindingModel.getCount(); i++) {
-            byte[] array = new byte[7]; // length is bounded by 7
+            emails.add(new String(getRandomString(8)));
 
-            new Random().nextBytes(array);
-            emails.add(new String(array, Charset.forName("ASCII")));
+            names.add(new String(getRandomString(8)));
 
-            new Random().nextBytes(array);
-            names.add(new String(array, Charset.forName("ASCII")));
-
-            new Random().nextBytes(array);
-            passwords.add("123");
+            passwords.add(new String(getRandomString(8)));
 
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 

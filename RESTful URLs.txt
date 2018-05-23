@@ -1,0 +1,11 @@
+GET /board.json/ Retrieve All Boards
+GET /board/{id}.json Retrieve Single Board
+POST /board.json/ Create a Board
+PUT /board/{id}.json Update a Board
+DELETE /board/{id}.json Delete a Board
+
+GET /board/{id}/task.json Retrieve All Tasks
+GET /board/{id}/task/{id2}.json Retrieve Single Task
+POST /board/{id}/task.json Create a Task
+PUT /board/{id}/task/{id2}.json Update a Task
+DELETE /board/{id}/task/{id2}.json Delete a Task

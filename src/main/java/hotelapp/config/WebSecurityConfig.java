@@ -41,8 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf();
 
-        http.csrf().disable();
-        //CsrfTokenResponseHeaderBindingFilter csrfTokenFilter = new CsrfTokenResponseHeaderBindingFilter();
-        //http.addFilterAfter(csrfTokenFilter, CsrfFilter.class);
+        //http.csrf().disable();
+        CsrfTokenResponseHeaderBindingFilter csrfTokenFilter = new CsrfTokenResponseHeaderBindingFilter();
+        http.addFilterAfter(csrfTokenFilter, CsrfFilter.class);
     }
 }

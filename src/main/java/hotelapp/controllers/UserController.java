@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,10 +36,7 @@ public class UserController {
     private BossService bossService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -64,8 +60,6 @@ public class UserController {
 
             return "redirect:/register";
         }
-
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         Zxcvbn passwordCheck = new Zxcvbn();
 
@@ -223,8 +217,6 @@ public class UserController {
 
                 return "redirect:/user/set_new_password?token=" + token;
             }
-
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
             Zxcvbn passwordCheck = new Zxcvbn();
 

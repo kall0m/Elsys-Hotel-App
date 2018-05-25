@@ -8,7 +8,6 @@ import hotelapp.models.Worker;
 import hotelapp.services.BoardService;
 import hotelapp.services.BossService;
 import hotelapp.services.WorkerService;
-import hotelapp.validators.BossValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;

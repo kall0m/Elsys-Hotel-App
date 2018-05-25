@@ -1,5 +1,6 @@
 package hotelapp.rest;
 
+import hotelapp.bindingModels.RestLogin;
 import hotelapp.models.User;
 import hotelapp.security.JwtAuthenticationResponse;
 import hotelapp.security.JwtTokenProvider;
@@ -22,12 +23,12 @@ public class UserRestController {
     JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody RestLogin restLogin) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
+                        restLogin.getEmail(),
+                        restLogin.getPassword()
                 )
         );
 

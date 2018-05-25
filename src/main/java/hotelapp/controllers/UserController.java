@@ -9,8 +9,11 @@ import hotelapp.models.Boss;
 import hotelapp.models.Role;
 import hotelapp.models.User;
 import hotelapp.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +29,8 @@ import java.util.UUID;
 
 @Controller
 public class UserController {
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -99,7 +104,12 @@ public class UserController {
                 EmailDrafts.APP_EMAIL
         );
 
-        emailService.sendEmail(registrationEmail);
+        try {
+            emailService.sendEmail(registrationEmail);
+        }catch( Exception e ){
+            // catch error
+            logger.info("Error Sending Email: " + e.getMessage());
+        }
 
         redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));
 
@@ -180,7 +190,12 @@ public class UserController {
                 EmailDrafts.APP_EMAIL
         );
 
-        emailService.sendEmail(forgotPasswordEmail);
+        try {
+            emailService.sendEmail(forgotPasswordEmail);
+        }catch( Exception e ){
+            // catch error
+            logger.info("Error Sending Email: " + e.getMessage());
+        }
 
         redir.addFlashAttribute("message", NotificationMessages.USER_FORGOT_PASSWORD_CONFIRMATION_EMAIL_SENT(boss.getEmail()));
 

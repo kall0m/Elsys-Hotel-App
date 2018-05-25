@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class BoardRestController {
     public static final Logger LOGGER = LoggerFactory.getLogger(BoardRestController.class);
 

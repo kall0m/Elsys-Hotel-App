@@ -1,8 +1,7 @@
-package hotelapp.services;
+package hotelapp.security;
 
+import hotelapp.security.AppUserDetails;
 import hotelapp.models.Worker;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,8 +9,7 @@ import org.springframework.stereotype.Service;
 import hotelapp.models.User;
 import hotelapp.repositories.UserRepository;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @Service("appUserDetailsService")
 public class AppUserDetailsService implements UserDetailsService {
@@ -22,6 +20,7 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
 
@@ -34,17 +33,25 @@ public class AppUserDetailsService implements UserDetailsService {
                 throw new UsernameNotFoundException("Account not enabled");
             }
 
-            Set<GrantedAuthority> grantedAuthorities = user.getRoles()
-                    .stream()
-                    .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .collect(Collectors.toSet());
+            return AppUserDetails.create(user);
+        }
+    }
 
-            return new org
-                    .springframework
-                    .security
-                    .core
-                    .userdetails
-                    .User(user.getEmail(), user.getPassword(), grantedAuthorities);
+    // This method is used by JwtAuthenticationFilter
+    @Transactional
+    public UserDetails loadUserById(Integer id) {
+        User user = userRepository.findById(id);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid User");
+        } else if(user instanceof Worker) {
+            throw new UsernameNotFoundException("Invalid User");
+        } else {
+            if(!user.isEnabled()) {
+                throw new UsernameNotFoundException("Account not enabled");
+            }
+
+            return AppUserDetails.create(user);
         }
     }
 }

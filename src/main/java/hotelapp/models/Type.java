@@ -1,35 +1,29 @@
 package hotelapp.models;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
-@Table(name = "boards")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-public class Board {
+@Table(name = "typeWorkersTask")
+public class Type {
     private Integer id;
 
     private String name;
 
-    private String description;
-
-    private Boss creator;
-
+    @JsonIgnore
     private Set<Worker> workers;
 
-    @JsonBackReference
+    @JsonIgnore
     private Set<Task> tasks;
 
-    public Board() {
+    private Boss boss;
+
+    public Type() {
         this.name = "";
-        this.description = "";
-        this.creator = null;
         this.workers = new TreeSet<>(new Comparator<Worker>() {
             @Override
             public int compare(Worker worker1, Worker worker2) { //TODO
@@ -46,12 +40,11 @@ public class Board {
                 return id1.compareTo(id2);
             }
         });
+        this.boss = null;
     }
 
-    public Board(String name, String description, Boss creator) {
+    public Type(String name) {
         this.name = name;
-        this.description = description;
-        this.creator = creator;
         this.workers = new TreeSet<>(new Comparator<Worker>() {
             @Override
             public int compare(Worker worker1, Worker worker2) { //TODO
@@ -89,26 +82,8 @@ public class Board {
         this.name = name;
     }
 
-    @Column(name = "description", nullable = true)
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @ManyToOne()
-    @JoinColumn(nullable = false, name = "creatorId")
-    public Boss getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Boss creator) {
-        this.creator = creator;
-    }
-
-    @ManyToMany(mappedBy = "boards")
+    @OrderBy("id ASC")
+    @OneToMany(mappedBy = "type")
     public Set<Worker> getWorkers() {
         return workers;
     }
@@ -117,16 +92,23 @@ public class Board {
         this.workers = workers;
     }
 
-    public void addWorker(Worker worker) {
-        this.workers.add(worker);
-    }
-
-    @OneToMany(mappedBy = "board")
+    @OrderBy("id ASC")
+    @OneToMany(mappedBy = "type")
     public Set<Task> getTasks() {
         return tasks;
     }
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "bossId")
+    public Boss getBoss() {
+        return boss;
+    }
+
+    public void setBoss(Boss boss) {
+        this.boss = boss;
     }
 }

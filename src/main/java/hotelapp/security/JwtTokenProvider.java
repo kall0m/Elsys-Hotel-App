@@ -1,10 +1,14 @@
 package hotelapp.security;
 
+import hotelapp.models.User;
+import hotelapp.services.UserService;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 
@@ -19,15 +23,19 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
+    @Autowired
+    private UserService userService;
+
     public String generateToken(Authentication authentication) {
 
-        AppUserDetails userPrincipal = (AppUserDetails) authentication.getPrincipal();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = this.userService.findByEmail(principal.getUsername());
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getUser().getId()))
+                .setSubject(Long.toString(user.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

@@ -24,6 +24,18 @@ public class WorkerServiceImpl implements WorkerService {
         return workerRepository.findAll();
     }
 
+    public boolean workerExists(Integer id) {
+        return workerRepository.exists(id);
+    }
+
+    public Worker findWorker(Integer id) {
+        return workerRepository.findOne(id);
+    }
+
+    public void deleteWorker(Worker worker) {
+        workerRepository.delete(worker);
+    }
+
     public void saveWorker(Worker worker) {
         workerRepository.saveAndFlush(worker);
     }

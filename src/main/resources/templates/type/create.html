@@ -3,17 +3,17 @@
         <section class="height-100 cover cover-8">
             <div class="col-md-7 col-sm-5">
                 <div class="background-image-holder">
-                    <img alt="image" src="/img/board-create-bg.jpg"/>
+                    <img alt="image" src="/img/task-create-bg.jpg"/>
                 </div>
             </div>
             <div class="col-md-5 col-sm-7 bg--white text-center">
                 <div class="pos-vertical-center">
                     <img class="logo" alt="Pillar" src="/img/logo3.jpg"/>
                     <p class="lead">
-                        Create Board
+                        Create Type
                     </p>
                     <div class="text-left">
-                        <form method="post" th:action="@{/boards/create}">
+                        <form method="post" th:action="@{/type/create}">
                             <th:block th:if="${message}">
                                 <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
                                     <div class="boxed boxed--sm bg--dark">
@@ -28,35 +28,14 @@
                                     <div class="input-with-icon">
                                         <label>Name:</label>
                                         <i class="icon icon-Male-2"></i>
-                                        <input type="text" name="name" placeholder="Name" autocomplete="off"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="input-with-icon">
-                                        <label>Description:</label>
-                                        <i class="icon icon-Security-Check"></i>
-                                        <input type="text" name="description" placeholder="Description" autocomplete="off"/>
+                                        <input type="text" name="name" placeholder="Name" autocomplete="off" required="required"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <label>Workers:</label>
-                                    <th:block th:each="worker : ${workers}">
-                                        <div class="input-checkbox">
-                                            <div class="inner"></div>
-                                            <input type="checkbox" name="workers" th:value="${worker.email}" th:text="${worker.fullName}"/>
-                                        </div>
-                                    </th:block>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <button type="submit" class="btn btn--primary vpe">Create</button>
+                                    <button type="submit" class="btn btn--primary vpe" onClick="return checker();">Create</button>
                                 </div>
                             </div>
                         </form>

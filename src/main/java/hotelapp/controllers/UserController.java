@@ -83,7 +83,7 @@ public class UserController {
                 userBindingModel.getSubscription()
         );
 
-        Role userRole = this.roleService.findRole("ROLE_USER");
+        Role userRole = this.roleService.findRole("ROLE_BOSS");
 
         boss.addRole(userRole);
 

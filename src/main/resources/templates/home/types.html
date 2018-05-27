@@ -14,19 +14,26 @@
                 <div class="row">
                     <div class="masonry">
                         <div class="masonry__container masonry--active">
-                            <th:block th:each="board : ${boards}">
+                            <th:block th:each="type : ${types}">
                                 <div class="col-sm-4 masonry__item">
-                                    <a th:href="@{/boards/{id}(id=${board.id})}">
-                                        <div class="boxed bg--white box-shadow">
-                                            <span>Board</span>
-                                            <h5 th:text="${board.name}"></h5>
-                                            <hr/>
-                                            <p th:text="${board.description}"></p>
-                                        </div>
-                                    </a>
+                                    <div class="boxed bg--white box-shadow">
+                                        <span>Type</span>
+                                        <label>Name:</label>
+                                        <h5 th:text="${type.name}"></h5>
+                                        <hr/>
+                                        <a th:href="@{/type/delete/{id}(id=${type.id})}">
+                                            <button type="button" class="btn bg--dark">Delete type</button>
+                                        </a>
+                                    </div>
                                 </div>
                             </th:block>
                         </div>
+                    </div>
+
+                    <div class="col-sm-12 text-center">
+                        <a th:href="@{/type/create}">
+                            <button type="button" class="btn bg--dark">Add type</button>
+                        </a>
                     </div>
                 </div>
             </div>

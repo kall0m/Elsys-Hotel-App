@@ -11,6 +11,8 @@ Spring Security
 
 REST API
 
+- https://blog.mwaysolutions.com/2014/06/05/10-best-practices-for-better-restful-api/ - practices for REST API
+
 - http://websystique.com/spring-boot/spring-boot-rest-api-example/ - building Spring Boot REST API - very useful!
 
 - https://medium.com/@salisuwy/building-a-spring-boot-rest-api-part-ii-7ff1e4384b0b - another tutorial for building Spring Boot REST API

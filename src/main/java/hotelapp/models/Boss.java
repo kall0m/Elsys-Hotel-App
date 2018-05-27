@@ -18,13 +18,13 @@ public class Boss extends User {
     private Set<Task> tasks;
 
     @JsonIgnore
-    private Set<Board> boards;
-
-    @JsonIgnore
     private double subscription;
 
     @JsonIgnore
-    private int workerAccounts;
+    private Set<Worker> workers;
+
+    @JsonIgnore
+    private Set<Type> types;
 
     public Boss(String email, String fullName, String password, double subscription) {
         super(email, fullName, password);
@@ -36,19 +36,28 @@ public class Boss extends User {
                 return id1.compareTo(id2);
             }
         });
-        this.boards = new TreeSet<>(new Comparator<Board>() {
+        this.subscription = subscription;
+        this.workers = new TreeSet<>(new Comparator<Worker>() {
             @Override
-            public int compare(Board board1, Board board2) { //TODO
-                Integer id1 = board1.getId();
-                Integer id2 = board2.getId();
+            public int compare(Worker worker1, Worker worker2) { //TODO
+                Integer id1 = worker1.getId();
+                Integer id2 = worker2.getId();
                 return id1.compareTo(id2);
             }
         });
-        this.subscription = subscription;
+        this.types = new TreeSet<>(new Comparator<Type>() {
+            @Override
+            public int compare(Type type1, Type type2) { //TODO
+                String name1 = type1.getName();
+                String name2 = type2.getName();
+                return name1.compareTo(name2);
+            }
+        });
     }
 
     public Boss() {    }
 
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "assignor")
     public Set<Task> getTasks() {
         return tasks;
@@ -56,15 +65,6 @@ public class Boss extends User {
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
-    }
-
-    @OneToMany(mappedBy = "creator")
-    public Set<Board> getBoards() {
-        return boards;
-    }
-
-    public void setBoards(Set<Board> boards) {
-        this.boards = boards;
     }
 
     @Column(name = "subscription")
@@ -76,12 +76,23 @@ public class Boss extends User {
         this.subscription = subscription;
     }
 
-    @Column(name = "workerAccounts")
-    public int getWorkerAccounts() {
-        return workerAccounts;
+    @OrderBy("id ASC")
+    @OneToMany(mappedBy = "boss")
+    public Set<Worker> getWorkers() {
+        return workers;
     }
 
-    public void setWorkerAccounts(int workerAccounts) {
-        this.workerAccounts = workerAccounts;
+    public void setWorkers(Set<Worker> workers) {
+        this.workers = workers;
+    }
+
+    @OrderBy("name ASC")
+    @OneToMany(mappedBy = "boss")
+    public Set<Type> getTypes() {
+        return types;
+    }
+
+    public void setTypes(Set<Type> types) {
+        this.types = types;
     }
 }

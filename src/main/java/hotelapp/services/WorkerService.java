@@ -9,5 +9,11 @@ public interface WorkerService {
 
     List<Worker> getAllWorkers();
 
+    boolean workerExists(Integer id);
+
+    Worker findWorker(Integer id);
+
+    void deleteWorker(Worker worker);
+
     void saveWorker(Worker worker);
 }

@@ -11,7 +11,7 @@ public interface TaskService {
 
     Task findTask(Integer id);
 
-    void deleteTask(Task board);
+    void deleteTask(Task task);
 
-    void saveTask(Task board);
+    void saveTask(Task task);
 }

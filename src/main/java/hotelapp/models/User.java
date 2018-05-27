@@ -2,14 +2,11 @@ package hotelapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 @Entity
 @Table(name = "users")
@@ -36,6 +33,9 @@ public class User {
 
     @JsonIgnore
     private String forgotPasswordToken;
+
+    @JsonIgnore
+    private String jwtToken;
 
     @JsonIgnore
     private Set<Role> roles;
@@ -114,6 +114,15 @@ public class User {
         this.forgotPasswordToken = forgotPasswordToken;
     }
 
+    @Column(name = "jwtToken")
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     public Set<Role> getRoles() {
@@ -126,5 +135,37 @@ public class User {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (enabled != user.enabled) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (fullName != null ? !fullName.equals(user.fullName) : user.fullName != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (confirmationToken != null ? !confirmationToken.equals(user.confirmationToken) : user.confirmationToken != null)
+            return false;
+        if (forgotPasswordToken != null ? !forgotPasswordToken.equals(user.forgotPasswordToken) : user.forgotPasswordToken != null)
+            return false;
+        return roles != null ? roles.equals(user.roles) : user.roles == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + (confirmationToken != null ? confirmationToken.hashCode() : 0);
+        result = 31 * result + (forgotPasswordToken != null ? forgotPasswordToken.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        return result;
     }
 }

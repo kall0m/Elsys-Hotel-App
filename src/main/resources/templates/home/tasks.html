@@ -12,17 +12,20 @@
                 </th:block>
 
                 <div class="row">
-                    <h1 th:text="${board.name}"></h1>
-                    <h5 th:text="${board.description}"></h5>
                     <div class="masonry">
                         <div class="masonry__container masonry--active">
                             <th:block th:each="task : ${tasks}">
                                 <div class="col-sm-4 masonry__item">
-                                    <a th:href="@{/boards/{id}/tasks/{id2}(id=${board.id})(id2=${task.id})}">
+                                    <a th:href="@{/tasks/{id}(id=${task.id})}">
                                         <div class="boxed bg--white box-shadow">
                                             <span>Task</span>
+                                            <label>Description: </label>
+                                            <h5 th:text="${task.description}"></h5>
                                             <hr/>
-                                            <p th:text="${task.description}"></p>
+                                            <label>Status: </label>
+                                            <h5 th:text="${task.status}"></h5>
+                                            <label>Type: </label>
+                                            <h5 th:text="${task.type.name}"></h5>
                                         </div>
                                     </a>
                                 </div>
@@ -31,7 +34,7 @@
                     </div>
 
                     <div class="col-sm-12 text-center">
-                        <a th:href="@{/boards/{id}/tasks/create(id=${board.id})}">
+                        <a th:href="@{/task/create}">
                             <button type="button" class="btn bg--dark">Add task</button>
                         </a>
                     </div>

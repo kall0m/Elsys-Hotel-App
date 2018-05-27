@@ -1,24 +1,18 @@
 package hotelapp.controllers;
 
 import hotelapp.bindingModels.TaskBindingModel;
-import hotelapp.models.Board;
-import hotelapp.models.Boss;
-import hotelapp.models.Task;
-import hotelapp.models.Worker;
-import hotelapp.services.BoardService;
-import hotelapp.services.BossService;
-import hotelapp.services.TaskService;
-import hotelapp.services.WorkerService;
+import hotelapp.models.*;
+import hotelapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,60 +22,207 @@ public class TaskController {
     @Autowired
     TaskService taskService;
     @Autowired
-    BoardService boardService;
+    TypeService typeService;
     @Autowired
     BossService bossService;
     @Autowired
     WorkerService workerService;
 
-    @GetMapping("/boards/{id}/tasks/create")
+    @GetMapping("/tasks")
     @PreAuthorize("isAuthenticated()")
-    public String create(@PathVariable Integer id, Model model) {
-        if(!this.boardService.boardExists(id)) {
-            return "redirect:/boards";
+    public String tasks(Model model) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+        Worker worker = this.workerService.findByEmail(principal.getUsername());
+
+        List<Task> tasks = new ArrayList<>();
+
+        if(boss != null) {
+            tasks = new ArrayList<>(boss.getTasks());
+        } else if(worker != null) {
+            tasks = new ArrayList<>(worker.getBoss().getTasks());
         }
 
-        Board board = this.boardService.findBoard(id);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("view", "home/tasks");
 
-        List<Worker> workers = new ArrayList<>(board.getWorkers());
+        return "base-layout";
+    }
 
-        model.addAttribute("board", board);
-        model.addAttribute("workers", workers);
+    @GetMapping("/task/create")
+    @PreAuthorize("isAuthenticated()")
+    public String create(Model model, RedirectAttributes redir) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        model.addAttribute("types", boss.getTypes());
         model.addAttribute("view", "task/create");
 
         return "base-layout";
     }
 
-    @PostMapping("/boards/{id}/tasks/create")
+    @PostMapping("/task/create")
     @PreAuthorize("isAuthenticated()")
-    public String createProcess(@PathVariable Integer id, TaskBindingModel taskBindingModel, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/board/{id}/tasks/create";
-        }
-
-        if(!this.boardService.boardExists(id)) {
-            return "redirect:/boards";
-        }
-
+    public String createProcess(TaskBindingModel taskBindingModel, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
 
-        if(boss == null) {
-            return "redirect:/board/{id}/tasks/create";
-        }
+        Type type = this.typeService.findTypeByName(boss, taskBindingModel.getTypeName());
 
-        Board board = this.boardService.findBoard(id);
+        if(type == null) {
+            redir.addFlashAttribute("message", NotificationMessages.TYPE_DOESNT_EXIST);
+            return "redirect:/task/create";
+        }
 
         Task task = new Task(
                 taskBindingModel.getDescription()
         );
 
         task.setAssignor(boss);
-        task.setBoard(board);
-        task.setWorker(workerService.findByEmail(taskBindingModel.getWorker()));
+        task.setType(type);
 
         this.taskService.saveTask(task);
 
-        return "redirect:/boards";
+        redir.addFlashAttribute("message", NotificationMessages.TASK_SUCCESSFULLY_CREATED);
+
+        return "redirect:/tasks/" + task.getId();
+    }
+
+    @GetMapping("/tasks/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String details(@PathVariable Integer id, Model model, RedirectAttributes redir) {
+        if(!this.taskService.taskExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        Task task = this.taskService.findTask(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getTasks().contains(task)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        model.addAttribute("task", task);
+        model.addAttribute("view", "task/details");
+
+        return "base-layout";
+    }
+
+    @GetMapping("/tasks/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String update(@PathVariable Integer id, Model model, RedirectAttributes redir) {
+        if(!this.taskService.taskExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        Task task = this.taskService.findTask(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getTasks().contains(task)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        model.addAttribute("task", task);
+        model.addAttribute("types", boss.getTypes());
+        model.addAttribute("view", "task/edit");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/tasks/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String updateProcess(TaskBindingModel taskBindingModel, @PathVariable Integer id, RedirectAttributes redir) {
+        if(!this.taskService.taskExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        Task currentTask = this.taskService.findTask(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getTasks().contains(currentTask)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        if(taskBindingModel.getDescription() != null) {
+            currentTask.setDescription(taskBindingModel.getDescription());
+        }
+
+        Type type = this.typeService.findTypeByName(boss, taskBindingModel.getTypeName());
+
+        if(type == null) {
+            redir.addFlashAttribute("message", NotificationMessages.TYPE_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        currentTask.setType(type);
+
+        this.taskService.saveTask(currentTask);
+
+        redir.addFlashAttribute("message", NotificationMessages.CHANGES_SAVED);
+
+        return "redirect:/tasks/" + currentTask.getId();
+    }
+
+    @GetMapping("/tasks/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable Integer id, Model model, RedirectAttributes redir) {
+        if(!this.taskService.taskExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        Task task = this.taskService.findTask(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getTasks().contains(task)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        model.addAttribute("task", task);
+        model.addAttribute("types", boss.getTypes());
+        model.addAttribute("view", "task/delete");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/tasks/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteProcess(@PathVariable Integer id, RedirectAttributes redir) {
+        if(!this.taskService.taskExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        Task task = this.taskService.findTask(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getTasks().contains(task)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        this.taskService.deleteTask(task);
+
+        redir.addFlashAttribute("message", NotificationMessages.TASK_SUCCESSFULLY_DELETED);
+
+        return "redirect:/tasks";
     }
 }

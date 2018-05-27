@@ -24,13 +24,13 @@
                                 <a th:href="@{/about}">About</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <a th:href="@{/boards}">Boards</a>
+                                <a th:href="@{/tasks}">Tasks</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <a th:href="@{/boards/create}">New Board</a>
+                                <a th:href="@{/workers}">Workers</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <a th:href="@{/worker/generate-account}">Generate Account</a>
+                                <a th:href="@{/types}">Types</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/logout}">Logout</a>

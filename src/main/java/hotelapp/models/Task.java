@@ -1,13 +1,9 @@
 package hotelapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "tasks")
@@ -19,21 +15,25 @@ public class Task {
 
     private String description;
 
+    private String status;
+
     private Boss assignor;
 
     private Worker worker;
 
-    private Board board;
+    private Type type;
 
     public Task() {
         this.description = "";
+        this.status = "To do";
         this.assignor = null;
         this.worker = null;
-        this.board = null;
+        this.type = null;
     }
 
     public Task(String description) {
         this.description = description;
+        this.status = "To do";
     }
 
     @Id
@@ -53,6 +53,15 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "status", nullable = false)
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @ManyToOne()
@@ -76,12 +85,12 @@ public class Task {
     }
 
     @ManyToOne()
-    @JoinColumn(nullable = false, name = "boardId")
-    public Board getBoard() {
-        return board;
+    @JoinColumn(name = "typeTaskId")
+    public Type getType() {
+        return type;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public void setType(Type type) {
+        this.type = type;
     }
 }

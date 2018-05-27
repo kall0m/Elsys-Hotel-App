@@ -1,6 +1,5 @@
 package hotelapp.services;
 
-import hotelapp.models.Board;
 import hotelapp.models.Boss;
 
 import java.util.List;
@@ -14,11 +13,9 @@ public interface BossService {
 
     List<Boss> getAllBosses();
 
-    boolean checkBoardsCount(Boss boss);
-
-    boolean checkTasksInBoardCount(Boss boss, Board board);
-
     boolean checkWorkerAccountsCount(Boss boss);
+
+    boolean checkTypesCount(Boss boss);
 
     void saveBoss(Boss boss);
 }

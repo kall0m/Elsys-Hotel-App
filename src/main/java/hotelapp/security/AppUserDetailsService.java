@@ -25,12 +25,10 @@ public class AppUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException("Invalid User");
-        } else if(user instanceof Worker) {
-            throw new UsernameNotFoundException("Invalid User");
+            throw new UsernameNotFoundException("No user found with email: " + email);
         } else {
             if(!user.isEnabled()) {
-                throw new UsernameNotFoundException("Account not enabled");
+                throw new UsernameNotFoundException("No user found with email: " + email);
             }
 
             return AppUserDetails.create(user);
@@ -43,12 +41,10 @@ public class AppUserDetailsService implements UserDetailsService {
         User user = userRepository.findById(id);
 
         if (user == null) {
-            throw new UsernameNotFoundException("Invalid User");
-        } else if(user instanceof Worker) {
-            throw new UsernameNotFoundException("Invalid User");
+            throw new UsernameNotFoundException("No user found with id: " + id);
         } else {
             if(!user.isEnabled()) {
-                throw new UsernameNotFoundException("Account not enabled");
+                throw new UsernameNotFoundException("No user found with id: " + id);
             }
 
             return AppUserDetails.create(user);

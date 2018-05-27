@@ -31,23 +31,23 @@ public class AppUserDetails extends User implements UserDetails {
         this.user = user;
     }
 
-    public static AppUserDetails create(User user) {
+    public static UserDetails create(User user) {
         Set<GrantedAuthority> grantedAuthorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
-        return new AppUserDetails(
+        /*return new AppUserDetails(
                 user,
                 grantedAuthorities
-        );
+        );*/
 
-        /*return new org
+        return new org
                 .springframework
                 .security
                 .core
                 .userdetails
-                .User(user.getEmail(), user.getPassword(), grantedAuthorities);*/
+                .User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
 
     public User getUser() {

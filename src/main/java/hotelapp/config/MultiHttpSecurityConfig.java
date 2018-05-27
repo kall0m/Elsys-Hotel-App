@@ -93,12 +93,12 @@ public class MultiHttpSecurityConfig {
 
         }
 
-        @Bean
+        /*@Bean
         CorsConfigurationSource corsConfigurationSource() {
             final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
             return source;
-        }
+        }*/
     }
 
     @Configuration
@@ -122,7 +122,5 @@ public class MultiHttpSecurityConfig {
             //CsrfTokenResponseHeaderBindingFilter csrfTokenFilter = new CsrfTokenResponseHeaderBindingFilter();
             //http.addFilterAfter(csrfTokenFilter, CsrfFilter.class);
         }
-
-
     }
 }

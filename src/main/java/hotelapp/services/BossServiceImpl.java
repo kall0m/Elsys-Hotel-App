@@ -1,6 +1,5 @@
 package hotelapp.services;
 
-import hotelapp.models.Board;
 import hotelapp.models.Boss;
 import hotelapp.repositories.BossRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,37 +32,25 @@ public class BossServiceImpl implements BossService {
         return bossRepository.findAll();
     }
 
-    public boolean checkBoardsCount(Boss boss) {
-        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
-            return boss.getBoards().size() < SubscriptionService.FREE_BOARDS_COUNT;
-        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
-            return boss.getBoards().size() < SubscriptionService.FIRST_BOARDS_COUNT;
-        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
-            return boss.getBoards().size() < SubscriptionService.SECOND_BOARDS_COUNT;
-        }
-
-        return false;
-    }
-
-    public boolean checkTasksInBoardCount(Boss boss, Board board) {
-        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
-            return boss.getBoards().size() < SubscriptionService.FREE_TASKS_COUNT;
-        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
-            return boss.getBoards().size() < SubscriptionService.FIRST_TASKS_COUNT;
-        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
-            return boss.getBoards().size() < SubscriptionService.SECOND_TASKS_COUNT;
-        }
-
-        return false;
-    }
-
     public boolean checkWorkerAccountsCount(Boss boss) {
         if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
-            return boss.getWorkerAccounts() < SubscriptionService.FREE_ACCS_COUNT;
+            return boss.getWorkers().size() < SubscriptionService.FREE_ACCS_COUNT;
         } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
-            return boss.getWorkerAccounts() < SubscriptionService.FIRST_ACCS_COUNT;
+            return boss.getWorkers().size() < SubscriptionService.FIRST_ACCS_COUNT;
         } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
-            return boss.getWorkerAccounts() < SubscriptionService.SECOND_ACCS_COUNT;
+            return boss.getWorkers().size() < SubscriptionService.SECOND_ACCS_COUNT;
+        }
+
+        return false;
+    }
+
+    public boolean checkTypesCount(Boss boss) {
+        if(boss.getSubscription() == SubscriptionService.FREE_SUB) {
+            return boss.getTypes().size() < SubscriptionService.FREE_TYPES_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.FIRST_SUB) {
+            return boss.getTypes().size() < SubscriptionService.FIRST_TYPES_COUNT;
+        } else if(boss.getSubscription() == SubscriptionService.SECOND_SUB) {
+            return boss.getTypes().size() < SubscriptionService.SECOND_TYPES_COUNT;
         }
 
         return false;

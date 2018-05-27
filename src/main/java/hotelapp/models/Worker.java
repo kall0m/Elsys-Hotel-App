@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -17,10 +16,14 @@ public class Worker extends User {
     @JsonIgnore
     private Set<Task> tasks;
 
-    @JsonIgnore
-    private Set<Board> boards;
+    private Boss boss;
 
-    public Worker(String email, String fullName, String password) {
+    private Type type;
+
+    @JsonIgnore
+    private String realPassword;
+
+    public Worker(String email, String fullName, String password, String realPassword) {
         super(email, fullName, password);
         this.tasks = new TreeSet<>(new Comparator<Task>() {
             @Override
@@ -30,18 +33,12 @@ public class Worker extends User {
                 return id1.compareTo(id2);
             }
         });
-        this.boards = new TreeSet<>(new Comparator<Board>() {
-            @Override
-            public int compare(Board board1, Board board2) { //TODO
-                Integer id1 = board1.getId();
-                Integer id2 = board2.getId();
-                return id1.compareTo(id2);
-            }
-        });
+        this.realPassword = realPassword;
     }
 
     public Worker() {    }
 
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "worker")
     public Set<Task> getTasks() {
         return tasks;
@@ -51,17 +48,40 @@ public class Worker extends User {
         this.tasks = tasks;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "boards_workers")
-    public Set<Board> getBoards() {
-        return boards;
+    public void addTask(Task task) {
+        this.tasks.add(task);
     }
 
-    public void setBoards(Set<Board> boards) {
-        this.boards = boards;
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
     }
 
-    public void addBoard(Board board) {
-        this.boards.add(board);
+    @ManyToOne()
+    @JoinColumn(name = "bossId")
+    public Boss getBoss() {
+        return boss;
+    }
+
+    public void setBoss(Boss boss) {
+        this.boss = boss;
+    }
+
+    @ManyToOne()
+    @JoinColumn(name = "typeWorkerId")
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    @Column(name = "realPassword")
+    public String getRealPassword() {
+        return realPassword;
+    }
+
+    public void setRealPassword(String realPassword) {
+        this.realPassword = realPassword;
     }
 }

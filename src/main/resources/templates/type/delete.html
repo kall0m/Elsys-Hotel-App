@@ -10,10 +10,10 @@
                 <div class="pos-vertical-center">
                     <img class="logo" alt="Pillar" src="/img/logo3.jpg"/>
                     <p class="lead">
-                        Create Task
+                        Delete Type
                     </p>
                     <div class="text-left">
-                        <form method="post" th:action="@{/task/create}">
+                        <form method="post" th:action="@{/type/delete/{id}(id=${type.id})}">
                             <th:block th:if="${message}">
                                 <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
                                     <div class="boxed boxed--sm bg--dark">
@@ -26,25 +26,16 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="input-with-icon">
-                                        <label>Description:</label>
+                                        <label>Name:</label>
                                         <i class="icon icon-Male-2"></i>
-                                        <input type="text" name="description" placeholder="Description" autocomplete="off" required="required"/>
-                                    </div>
-
-                                    <div class="input-select">
-                                        <label>Type:</label>
-                                        <select name="typeName" required="required">
-                                            <th:block th:each="type : ${types}">
-                                                <option th:value="${type.name}" th:text="${type.name}"></option>
-                                            </th:block>
-                                        </select>
+                                        <input type="text" name="name" placeholder="Name" autocomplete="off" th:value="${type.name}" required="required" readonly="readonly"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn btn--primary vpe" onClick="return checker();">Create</button>
+                                    <button type="submit" class="btn btn--primary vpe" onClick="return checker();">Delete</button>
                                 </div>
                             </div>
                         </form>

@@ -2,19 +2,19 @@ package hotelapp.bindingModels;
 
 import javax.validation.constraints.NotNull;
 
-public class TaskBindingModel {
+public class WorkerBindingModel {
     @NotNull
-    private String description;
+    private int count;
 
     @NotNull
     private String typeName;
 
-    public String getDescription() {
-        return description;
+    public int getCount() {
+        return count;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getTypeName() {

@@ -3,6 +3,7 @@ package hotelapp.services;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class PayPalClient {
     String clientId = "ARgYDj9RIViPklbz5XbLe7sSZpaBboL5LufzxGekuEhs5nHJXe6bpQtT8fVFgGM6HeIrpZu966g2tWDZ";
     String clientSecret = "EKmgk0VQtAjh4CeVCAThT-M8tu9HypB3-sgJM05CS2yqyRCdimOv1OdF7Q4r8M9oxdqEqnl1c3puO_HO";

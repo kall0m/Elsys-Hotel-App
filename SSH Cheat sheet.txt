@@ -1,0 +1,9 @@
+ssh hacker@hacktues.com
+
+pass
+
+scp file server - copy a file from comp to server
+
+history | grep java - history for "java" usage
+
+nohup java -jar hotelapp-0.0.1-SNAPSHOT.jar & - start application on background

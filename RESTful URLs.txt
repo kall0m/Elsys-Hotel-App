@@ -1,11 +1,15 @@
-GET /board.json/ Retrieve All Boards
-GET /board/{id}.json Retrieve Single Board
-POST /board.json/ Create a Board
-PUT /board/{id}.json Update a Board
-DELETE /board/{id}.json Delete a Board
-
-GET /board/{id}/task.json Retrieve All Tasks
-GET /board/{id}/task/{id2}.json Retrieve Single Task
-POST /board/{id}/task.json Create a Task
-PUT /board/{id}/task/{id2}.json Update a Task
-DELETE /board/{id}/task/{id2}.json Delete a Task
+----------------------------------------------------------------------------------------------------
+Request | URL                 | Description                 	                    | Authorization
+----------------------------------------------------------------------------------------------------
+GET     | /tasks              | Retrieve All Tasks            		            | All logged in
+GET     | /tasks/{id}         | Retrieve Single Task                 		    | All logged in
+POST    | /tasks              | Create a Task                    		    | Boss
+PUT     | /tasks/{id}         | Update a Task                   		    | Boss
+DELETE  | /tasks/{id}         | Delete a Task                   		    | Boss
+POST    | /tasks/{id}/workers | Handle a Task by logged in Worker                   | Worker
+DELETE  | /tasks/{id}/workers | Reject a Task by logged in Worker                   | Worker
+PUT     | /tasks/{id}/workers | Finish a Task by logged in Worker                   | Worker
+GET     | /workers            | Retrieve All Workers                                | All logged in
+POST    | /login              | Login                                               | All
+GET     | /logout             | Logout                                              | All
+----------------------------------------------------------------------------------------------------

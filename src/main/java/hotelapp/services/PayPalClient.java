@@ -12,7 +12,7 @@ import java.util.Map;
 public class PayPalClient {
     String clientId = "ARgYDj9RIViPklbz5XbLe7sSZpaBboL5LufzxGekuEhs5nHJXe6bpQtT8fVFgGM6HeIrpZu966g2tWDZ";
     String clientSecret = "EKmgk0VQtAjh4CeVCAThT-M8tu9HypB3-sgJM05CS2yqyRCdimOv1OdF7Q4r8M9oxdqEqnl1c3puO_HO";
-    
+
     public Map<String, Object> createPayment(String sum){
         Map<String, Object> response = new HashMap<String, Object>();
         Amount amount = new Amount();

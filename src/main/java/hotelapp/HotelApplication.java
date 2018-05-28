@@ -18,13 +18,10 @@ public class HotelApplication {
 	@Bean
 	public EmbeddedServletContainerCustomizer containerCustomizer() {
 		return (container -> {
-			container.setContextPath("");
-			if (System.getenv("PORT") != null) {
-				container.setPort(Integer.valueOf(System.getenv("PORT")));
-
-			}
+			container.setContextPath("/nemswiftsvc");
+			container.setPort(Integer.valueOf(System.getenv("PORT")));
 		});
-	} 
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(HotelApplication.class, args);

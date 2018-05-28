@@ -227,7 +227,7 @@ public class TaskRestController {
         return new ResponseEntity<Task>(HttpStatus.NO_CONTENT);
     }
 
-    // -------------------Handle a Task by Worker-----------------------------------------
+    // -------------------Handle a Task by logged in Worker-----------------------------------------
     @RequestMapping(value = "/tasks/{id}/workers", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_WORKER')")
     public ResponseEntity<?> handleTaskByWorker(@PathVariable("id") Integer id) {
@@ -274,7 +274,7 @@ public class TaskRestController {
         return new ResponseEntity<Task>(task, HttpStatus.OK);
     }
 
-    // -------------------Reject a Task by Worker-----------------------------------------
+    // -------------------Reject a Task by logged in Worker-----------------------------------------
     @RequestMapping(value = "/tasks/{id}/workers", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('ROLE_WORKER')")
     public ResponseEntity<?> rejectTaskByWorker(@PathVariable("id") Integer id) {
@@ -327,7 +327,7 @@ public class TaskRestController {
         return new ResponseEntity<Task>(task, HttpStatus.OK);
     }
 
-    // -------------------Finish a Task by Worker-----------------------------------------
+    // -------------------Finish a Task by logged in Worker-----------------------------------------
     @RequestMapping(value = "/tasks/{id}/workers", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('ROLE_WORKER')")
     public ResponseEntity<?> finishTaskByWorker(@PathVariable("id") Integer id) {

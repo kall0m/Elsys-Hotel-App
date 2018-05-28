@@ -51,7 +51,7 @@ public class TaskController {
     }
 
     @GetMapping("/task/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String create(Model model, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
@@ -63,7 +63,7 @@ public class TaskController {
     }
 
     @PostMapping("/task/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String createProcess(TaskBindingModel taskBindingModel, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
@@ -114,7 +114,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String update(@PathVariable Integer id, Model model, RedirectAttributes redir) {
         if(!this.taskService.taskExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
@@ -139,7 +139,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String updateProcess(TaskBindingModel taskBindingModel, @PathVariable Integer id, RedirectAttributes redir) {
         if(!this.taskService.taskExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
@@ -177,7 +177,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String delete(@PathVariable Integer id, Model model, RedirectAttributes redir) {
         if(!this.taskService.taskExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
@@ -202,7 +202,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String deleteProcess(@PathVariable Integer id, RedirectAttributes redir) {
         if(!this.taskService.taskExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);

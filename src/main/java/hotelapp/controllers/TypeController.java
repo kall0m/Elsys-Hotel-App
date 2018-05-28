@@ -54,7 +54,7 @@ public class TypeController {
     }
 
     @GetMapping("/type/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String create(Model model, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
@@ -70,7 +70,7 @@ public class TypeController {
     }
 
     @PostMapping("/type/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String createProcess(TypeBindingModel typeBindingModel, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
@@ -94,7 +94,7 @@ public class TypeController {
     }
 
     @GetMapping("/type/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String delete(Model model, @PathVariable Integer id, RedirectAttributes redir) {
         if(!this.typeService.typeExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TYPE_DOESNT_EXIST);
@@ -110,7 +110,7 @@ public class TypeController {
     }
 
     @PostMapping("/type/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String deleteProcess(@PathVariable Integer id, RedirectAttributes redir) {
         if(!this.typeService.typeExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.TYPE_DOESNT_EXIST);

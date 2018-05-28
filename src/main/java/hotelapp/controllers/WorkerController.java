@@ -76,7 +76,7 @@ public class WorkerController {
     }
 
     @GetMapping("/worker/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String create(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
@@ -88,7 +88,7 @@ public class WorkerController {
     }
 
     @PostMapping("worker/create")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String createProcess(RedirectAttributes redir, WorkerBindingModel workerBindingModel) {
         List<String> emails = new ArrayList<>();
         List<String> names = new ArrayList<>();
@@ -143,7 +143,7 @@ public class WorkerController {
     }
 
     @GetMapping("/worker/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String delete(Model model, @PathVariable Integer id, RedirectAttributes redir) {
         if(!this.workerService.workerExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.WORKER_DOESNT_EXIST);
@@ -163,7 +163,7 @@ public class WorkerController {
     }
 
     @PostMapping("/worker/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String deleteProcess(@PathVariable Integer id, RedirectAttributes redir) {
         if(!this.workerService.workerExists(id)) {
             redir.addFlashAttribute("message", NotificationMessages.WORKER_DOESNT_EXIST);

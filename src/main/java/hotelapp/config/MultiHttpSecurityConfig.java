@@ -37,7 +37,7 @@ public class MultiHttpSecurityConfig {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
-    @Configuration
+    /*@Configuration
     @Order(1)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
         @Autowired
@@ -107,8 +107,8 @@ public class MultiHttpSecurityConfig {
             final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
             return source;
-        }*/
-    }
+        }
+    }*/
 
     @Configuration
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {

@@ -15,14 +15,6 @@ public class HotelApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public EmbeddedServletContainerCustomizer containerCustomizer() {
-		return (container -> {
-			container.setContextPath("/nemswiftsvc");
-			container.setPort(Integer.valueOf(System.getenv("PORT")));
-		});
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(HotelApplication.class, args);
 	}

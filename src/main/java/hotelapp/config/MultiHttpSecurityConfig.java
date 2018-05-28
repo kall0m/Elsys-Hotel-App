@@ -68,7 +68,7 @@ public class MultiHttpSecurityConfig {
             return new BCryptPasswordEncoder();
         }
 
-        @Override
+        /*@Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .cors()
@@ -91,7 +91,17 @@ public class MultiHttpSecurityConfig {
             // Add our custom JWT security filter
             http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        }*/
+
+        /*
+        @Bean
+        public EmbeddedServletContainerCustomizer containerCustomizer() {
+            return (container -> {
+                container.setContextPath("/nemswiftsvc");
+                container.setPort(Integer.valueOf(System.getenv("PORT")));
+            });
         }
+         */
 
         /*@Bean
         CorsConfigurationSource corsConfigurationSource() {

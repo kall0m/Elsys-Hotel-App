@@ -1,0 +1,64 @@
+<main th:remove = "tag">
+<div class="main-container">
+    <section class="height-100 cover cover-8">
+        <div class="col-md-7 col-sm-5">
+            <div class="background-image-holder">
+                <img alt="image" src="/img/form-bg.jpg"/>
+            </div>
+        </div>
+        <div class="col-md-5 col-sm-7 bg--white text-center">
+            <div class="pos-vertical-center">
+                <img class="logo" alt="Pillar" src="/img/logo3.jpg" style="width: 450px !important; height: 324.5px !important;"/>
+                <p class="lead">
+                    Login
+                </p>
+                <div class="text-left">
+                    <form method="post" th:action="@{/login}">
+                        <th:block th:if="${message}">
+                            <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
+                                <div class="boxed boxed--sm bg--dark">
+                                    <span th:text="${message}"></span>
+                                </div>
+                                <div class="notification-close-cross notification-close"></div>
+                            </div>
+                        </th:block>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="input-with-icon">
+                                    <label>Username:</label>
+                                    <i class="icon icon-Male-2"></i>
+                                    <input type="text" name="email" placeholder="Username"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="input-with-icon">
+                                    <label>Password:</label>
+                                    <i class="icon icon-Security-Check"></i>
+                                    <input type="password" name="password" placeholder="••••••"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn--primary vpe" onClick="return checker();">Login</button>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <p class="type--fine-print">
+                                Forgot password?
+                                <a th:href="@{/user/forgot_password}">Start password recovery</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</main>

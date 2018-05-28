@@ -1,0 +1,38 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="bg--secondary">
+            <div class="container">
+                <th:block th:if="${message}">
+                    <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
+                        <div class="boxed boxed--sm bg--dark">
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div class="notification-close-cross notification-close"></div>
+                    </div>
+                </th:block>
+
+                <div class="row">
+                    <p>Description:</p>
+                    <h5 th:text="${task.description}"></h5>
+                    <p>Status:</p>
+                    <h5 th:text="${task.status}"></h5>
+                    <p>Type:</p>
+                    <h5 th:text="${task.type.name}"></h5>
+                    <th:block th:if="${task.worker}">
+                        <p>Worker:</p>
+                        <h5 th:text="${task.worker.email}"></h5>
+                    </th:block>
+
+                    <div class="col-sm-12">
+                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}">
+                            <button type="button" class="btn bg--primary">Edit task</button>
+                        </a>
+                        <a th:href="@{/tasks/delete/{id}(id=${task.id})}">
+                            <button type="button" class="btn bg--primary">Delete task</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

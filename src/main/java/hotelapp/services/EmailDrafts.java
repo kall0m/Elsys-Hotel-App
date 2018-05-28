@@ -3,7 +3,7 @@ package hotelapp.services;
 public final class EmailDrafts {
     // APPLICATION NAME
     public static final String APP_NAME = "Dolores TUES";
-    public static final String APP_EMAIL = "k.madjunov@gmail.com";
+    public static final String APP_EMAIL = "dolores.hotelapp@gmail.com";
     public static final String EMAIL_CLOSING = "Sincerely yours,\n" + APP_EMAIL;
 
     // USER REGISTRATION

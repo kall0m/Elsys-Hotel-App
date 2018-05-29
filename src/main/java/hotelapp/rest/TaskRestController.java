@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -46,7 +47,9 @@ public class TaskRestController {
         if(boss != null) {
             tasks = new ArrayList<>(boss.getTasks());
         } else if(worker != null) {
-            tasks = new ArrayList<>(worker.getBoss().getTasks());
+            tasks = new ArrayList<>(worker.getBoss().getTasks()
+            .stream()
+            .filter(t -> t.getType().equals(worker.getType())).collect(Collectors.toList()));
         }
 
         if (tasks.isEmpty()) {
@@ -123,10 +126,6 @@ public class TaskRestController {
             this.typeName = typeName;
         }
     }
-
-    /*@RequestMapping(value = "/tasks", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ROLE_BOSS')")
-    public ResponseEntity<?> createTask(@RequestParam String description, @RequestParam String typeName /*@RequestBody TaskType taskType, UriComponentsBuilder ucBuilder) {*/
 
     @RequestMapping(value = "/tasks", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_BOSS')")
@@ -243,15 +242,7 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        /*if(!this.workerService.workerExists(id2)) {
-            LOGGER.error("Unable to handle Task by Worker. Worker with id {} not found.", id2);
-            return new ResponseEntity(new CustomErrorType("Unable to handle Task by Worker. Worker with id " + id2 + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }*/
-
         Task task = this.taskService.findTask(id);
-
-        //Worker worker = this.workerService.findWorker(id2);
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Worker worker = this.workerService.findByEmail(principal.getUsername());
@@ -262,16 +253,11 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        /*if(!boss.getWorkers().contains(worker) || !worker.getType().equals(task.getType())) {
-            LOGGER.error("Unable to handle Task by Worker. Worker with id {} not found or is of different type ({}).", id2, worker.getType());
-            return new ResponseEntity(new CustomErrorType("Unable to handle Task by Worker. Worker with id " + id2 + " not found or is of different type (" + worker.getType() + ")."),
-                    HttpStatus.NOT_FOUND);
-        }*/
-
         task.setStatus("Doing");
         task.setWorker(worker);
 
         worker.addTask(task);
+        worker.setBusy(true);
 
         this.taskService.saveTask(task);
 
@@ -290,15 +276,7 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        /*if(!this.workerService.workerExists(id2)) {
-            LOGGER.error("Unable to reject Task by Worker. Worker with id {} not found.", id2);
-            return new ResponseEntity(new CustomErrorType("Unable to reject Task by Worker. Worker with id " + id2 + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }*/
-
         Task task = this.taskService.findTask(id);
-
-        //Worker worker = this.workerService.findWorker(id2);
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Worker worker = this.workerService.findByEmail(principal.getUsername());
@@ -315,16 +293,11 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        /*if(!boss.getWorkers().contains(worker) || !worker.getType().equals(task.getType())) {
-            LOGGER.error("Unable to reject Task by Worker. Worker with id {} not found or is of different type ({}).", id2, worker.getType());
-            return new ResponseEntity(new CustomErrorType("Unable to reject Task by Worker. Worker with id " + id2 + " not found or is of different type (" + worker.getType() + ")."),
-                    HttpStatus.NOT_FOUND);
-        }*/
-
         task.setStatus("To do");
         task.setWorker(null);
 
         worker.removeTask(task);
+        worker.setBusy(false);
 
         this.taskService.saveTask(task);
 
@@ -343,15 +316,7 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        /*if(!this.workerService.workerExists(id2)) {
-            LOGGER.error("Unable to finish Task by Worker. Worker with id {} not found.", id2);
-            return new ResponseEntity(new CustomErrorType("Unable to finish Task by Worker. Worker with id " + id2 + " not found."),
-                    HttpStatus.NOT_FOUND);
-        }*/
-
         Task task = this.taskService.findTask(id);
-
-        //Worker worker = this.workerService.findWorker(id2);
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Worker worker = this.workerService.findByEmail(principal.getUsername());
@@ -367,12 +332,6 @@ public class TaskRestController {
             return new ResponseEntity(new CustomErrorType("Unable to finish Task by Worker. Task with id " + id + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-
-        /*if(!boss.getWorkers().contains(worker) || !worker.getType().equals(task.getType())) {
-            LOGGER.error("Unable to finish Task by Worker. Worker with id {} not found or is of different type ({}).", id2, worker.getType());
-            return new ResponseEntity(new CustomErrorType("Unable to finish Task by Worker. Worker with id " + id2 + " not found or is of different type (" + worker.getType() + ")."),
-                    HttpStatus.NOT_FOUND);
-        }*/
 
         task.setStatus("Done");
 

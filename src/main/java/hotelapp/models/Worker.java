@@ -23,6 +23,8 @@ public class Worker extends User {
     @JsonIgnore
     private String realPassword;
 
+    private boolean busy;
+
     public Worker(String email, String fullName, String password, String realPassword) {
         super(email, fullName, password);
         this.tasks = new TreeSet<>(new Comparator<Task>() {
@@ -34,6 +36,7 @@ public class Worker extends User {
             }
         });
         this.realPassword = realPassword;
+        this.busy = false;
     }
 
     public Worker() {    }
@@ -83,5 +86,14 @@ public class Worker extends User {
 
     public void setRealPassword(String realPassword) {
         this.realPassword = realPassword;
+    }
+
+    @Column(name = "isBusy")
+    public boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
     }
 }

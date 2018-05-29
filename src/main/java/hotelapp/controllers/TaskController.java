@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class TaskController {
@@ -41,7 +42,9 @@ public class TaskController {
         if(boss != null) {
             tasks = new ArrayList<>(boss.getTasks());
         } else if(worker != null) {
-            tasks = new ArrayList<>(worker.getBoss().getTasks());
+            tasks = new ArrayList<>(worker.getBoss().getTasks()
+                    .stream()
+                    .filter(t -> t.getType().equals(worker.getType())).collect(Collectors.toList()));
         }
 
         model.addAttribute("tasks", tasks);

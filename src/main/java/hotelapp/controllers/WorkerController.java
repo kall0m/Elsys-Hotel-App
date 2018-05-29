@@ -77,9 +77,14 @@ public class WorkerController {
 
     @GetMapping("/worker/create")
     @PreAuthorize("hasAuthority('ROLE_BOSS')")
-    public String create(Model model) {
+    public String create(Model model, RedirectAttributes redir) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!this.bossService.checkWorkerAccountsCount(boss)) {
+            redir.addFlashAttribute("message", NotificationMessages.MAXIMAL_ACCS_COUNT_LIMIT_REACHED);
+            return "redirect:/workers";
+        }
 
         model.addAttribute("types", boss.getTypes());
         model.addAttribute("view", "worker/create");
@@ -96,6 +101,11 @@ public class WorkerController {
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!this.bossService.checkWorkerAccountsCount(boss)) {
+            redir.addFlashAttribute("message", NotificationMessages.MAXIMAL_ACCS_COUNT_LIMIT_REACHED);
+            return "redirect:/workers";
+        }
 
         Type type = this.typeService.findTypeByName(boss, workerBindingModel.getTypeName());
 

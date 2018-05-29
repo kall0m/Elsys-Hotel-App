@@ -11,11 +11,11 @@ public final class SubscriptionService {
     public static final double FIRST_SUB = 10;
 
     public static final int FIRST_TYPES_COUNT = 10;
-    public static final int FIRST_ACCS_COUNT = 10;
+    public static final int FIRST_ACCS_COUNT = 20;
 
     // SECOND SUBSCRIPTION
     public static final double SECOND_SUB = 20;
 
-    public static final int SECOND_TYPES_COUNT = 20;
-    public static final int SECOND_ACCS_COUNT = 20;
+    public static final int SECOND_TYPES_COUNT = 12;
+    public static final int SECOND_ACCS_COUNT = 35;
 }

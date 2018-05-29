@@ -65,6 +65,8 @@ public final class NotificationMessages {
 
     public static final String WRONG_EMAIL_OR_PASSWORD = "Invalid email or password! Please try again.";
 
+    public static final String PAYPAL_ERROR = "PayPal Error. Please try again.";
+
     // URL MESSAGES
     public static final String ACCESS_DENIED = "You don't have power here!";
 

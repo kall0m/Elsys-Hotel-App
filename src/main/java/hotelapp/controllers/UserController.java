@@ -12,6 +12,7 @@ import hotelapp.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -43,8 +46,44 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final PayPalClient payPalClient;
+
+    @Autowired
+    UserController(PayPalClient payPalClient){
+        this.payPalClient = payPalClient;
+    }
+
     @GetMapping("/register")
-    public String register(Model model) {
+    public String register(Model model, @RequestParam String paymentId, HttpServletRequest request, RedirectAttributes redir) {
+        if(paymentId != null) {
+            Map<String, Object> response = payPalClient.completePayment(request);
+
+            if(response.containsValue("success") && response.containsKey("payment")) {
+                String appUrl = request.getScheme() + "://" + request.getServerName();
+
+                /*SimpleMailMessage registrationEmail = this.emailService.createEmail(
+                        boss.getEmail(),
+                        EmailDrafts.USER_REGISTRATION_SUBJECT,
+                        EmailDrafts.USER_REGISTRATION_CONTENT(appUrl, boss.getConfirmationToken()),
+                        EmailDrafts.APP_EMAIL
+                );
+
+                try {
+                    emailService.sendEmail(registrationEmail);
+                }catch( Exception e ){
+                    // catch error
+                    logger.info("Error Sending Email: " + e.getMessage());
+                }
+
+                redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));*/
+
+                return "redirect:/login";
+            } else {
+                redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
+                return "redirect:/register";
+            }
+        }
+
         model.addAttribute("view", "user/register");
 
         return "base-layout";
@@ -93,7 +132,22 @@ public class UserController {
         // Generate random 36-character string token for confirmation link
         boss.setConfirmationToken(UUID.randomUUID().toString());
 
+        Map<String, Object> response = new HashMap<>();
+
+        /*if(boss.getSubscription() != 0) {
+            String sum = String.valueOf(boss.getSubscription());
+
+            response = payPalClient.createPayment(sum, request);
+        }*/
+
         this.bossService.saveBoss(boss);
+
+        /*if(response.containsValue("success") && response.containsKey("redirect_url")) {
+            return "redirect:" + response.get("redirect_url");
+        } else {
+            redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
+            return "redirect:/register";
+        }*/
 
         String appUrl = request.getScheme() + "://" + request.getServerName();
 

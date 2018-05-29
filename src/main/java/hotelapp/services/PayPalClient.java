@@ -16,7 +16,7 @@ public class PayPalClient {
     String clientId = "ARgYDj9RIViPklbz5XbLe7sSZpaBboL5LufzxGekuEhs5nHJXe6bpQtT8fVFgGM6HeIrpZu966g2tWDZ";
     String clientSecret = "EKmgk0VQtAjh4CeVCAThT-M8tu9HypB3-sgJM05CS2yqyRCdimOv1OdF7Q4r8M9oxdqEqnl1c3puO_HO";
 
-    public Map<String, Object> createPayment(String sum){
+    public Map<String, Object> createPayment(String sum, HttpServletRequest request){
         Map<String, Object> response = new HashMap<String, Object>();
         Amount amount = new Amount();
         amount.setCurrency("USD");
@@ -35,10 +35,20 @@ public class PayPalClient {
         payment.setTransactions(transactions);
 
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("http://localhost:4200/cancel");
-        redirectUrls.setReturnUrl("http://localhost:4200/");
+        String appUrl = request.getScheme() + "://" + request.getServerName();
+
+        if(appUrl.contains("localhost")) {
+            redirectUrls.setCancelUrl("http://localhost:8080/register");
+            redirectUrls.setReturnUrl("http://localhost:8080/register");
+        } else {
+            redirectUrls.setCancelUrl("http://hacktues.com/register");
+            redirectUrls.setReturnUrl("http://hacktues.com/register");
+        }
+
         payment.setRedirectUrls(redirectUrls);
+
         Payment createdPayment;
+
         try {
             String redirectUrl = "";
             APIContext context = new APIContext(clientId, clientSecret, "sandbox");

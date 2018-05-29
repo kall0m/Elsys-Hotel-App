@@ -124,6 +124,10 @@ public class TaskRestController {
         }
     }
 
+    /*@RequestMapping(value = "/tasks", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
+    public ResponseEntity<?> createTask(@RequestParam String description, @RequestParam String typeName /*@RequestBody TaskType taskType, UriComponentsBuilder ucBuilder) {*/
+
     @RequestMapping(value = "/tasks", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public ResponseEntity<?> createTask(@RequestBody TaskType taskType, UriComponentsBuilder ucBuilder) {

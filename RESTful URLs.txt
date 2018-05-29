@@ -13,3 +13,11 @@ GET     | /workers            | Retrieve All Workers                            
 POST    | /login              | Login                                               | All
 GET     | /logout             | Logout                                              | All
 ----------------------------------------------------------------------------------------------------
+
+Login curl XML request example - curl -H "Content-Type: text/xml" -X POST -d "<RestLogin><email>asd@123.com</email><password>123456</password></RestLogin>" https://hacktues.com/api/login
+
+Logout curl request example - curl -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTI3NTUxMjYxLCJleHAiOjE1Mjc1NTE4NjF9.lNW7CmkSoX1-K95OlQaA96oYpVuh7__n2gH6AO3KnrtAbMbFV5q3DTJBof5JanW4Rf9eYh4t9z1kfo0VQgmZFQ" http://localhost:8080/api/logout
+
+Create a Task curl XML request example - curl -H "Content-Type: text/xml" -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTI3NTUxNDIxLCJleHAiOjE1Mjc1NTIwMjF9.ZEaMJV268lxmTmbm28HluZjzIuv857w97YJXXcUXLkG-Dp2Fif36389zkkeD5wXxf0ty5SXM-VBI54_A5rdhAw" -X POST -d "<TaskType><task><description>Clean lobby</description></task><typeName>Cleaner</typeName></TaskType>" https://hacktues.com/api/tasks
+
+Update a Task curl XML request example - curl -H "Content-Type: text/xml" -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTI3NTUxNDIxLCJleHAiOjE1Mjc1NTIwMjF9.ZEaMJV268lxmTmbm28HluZjzIuv857w97YJXXcUXLkG-Dp2Fif36389zkkeD5wXxf0ty5SXM-VBI54_A5rdhAw" -X PUT -d "<TaskType><task><description>Clean lobby</description></task><typeName>Cleaner</typeName></TaskType>" https://hacktues.com/api/tasks/2

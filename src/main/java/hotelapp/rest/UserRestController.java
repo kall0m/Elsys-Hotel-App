@@ -1,10 +1,14 @@
 package hotelapp.rest;
 
 import hotelapp.bindingModels.RestLogin;
+import hotelapp.models.Boss;
 import hotelapp.models.User;
+import hotelapp.models.Worker;
 import hotelapp.security.JwtAuthenticationResponse;
 import hotelapp.security.JwtTokenProvider;
+import hotelapp.services.BossService;
 import hotelapp.services.UserService;
+import hotelapp.services.WorkerService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,10 @@ public class UserRestController {
     private JwtTokenProvider tokenProvider;
     @Autowired
     private UserService userService;
+    @Autowired
+    private BossService bossService;
+    @Autowired
+    private WorkerService workerService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody RestLogin restLogin) {
@@ -59,7 +67,16 @@ public class UserRestController {
 
         this.userService.saveUser(user);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        Boss boss = this.bossService.findByEmail(restLogin.getEmail());
+        Worker worker = this.workerService.findByEmail(restLogin.getEmail());
+
+        if(boss != null) {
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, 0));
+        } else if(worker != null) {
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, worker, 1));
+        }
+
+        return null;
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)

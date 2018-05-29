@@ -16,7 +16,7 @@ public class PayPalClient {
     String clientId = "ARgYDj9RIViPklbz5XbLe7sSZpaBboL5LufzxGekuEhs5nHJXe6bpQtT8fVFgGM6HeIrpZu966g2tWDZ";
     String clientSecret = "EKmgk0VQtAjh4CeVCAThT-M8tu9HypB3-sgJM05CS2yqyRCdimOv1OdF7Q4r8M9oxdqEqnl1c3puO_HO";
 
-    public Map<String, Object> createPayment(String sum, HttpServletRequest request){
+    public Map<String, Object> createPayment(String sum, HttpServletRequest request, String email){
         Map<String, Object> response = new HashMap<String, Object>();
         Amount amount = new Amount();
         amount.setCurrency("USD");
@@ -39,10 +39,10 @@ public class PayPalClient {
 
         if(appUrl.contains("localhost")) {
             redirectUrls.setCancelUrl("http://localhost:8080/register");
-            redirectUrls.setReturnUrl("http://localhost:8080/register");
+            redirectUrls.setReturnUrl("http://localhost:8080/register?username=" + email);
         } else {
             redirectUrls.setCancelUrl("http://hacktues.com/register");
-            redirectUrls.setReturnUrl("http://hacktues.com/register");
+            redirectUrls.setReturnUrl("http://hacktues.com/register?username=" + email);
         }
 
         payment.setRedirectUrls(redirectUrls);

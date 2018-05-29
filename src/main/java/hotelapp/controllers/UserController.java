@@ -54,32 +54,41 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register(Model model, @RequestParam String paymentId, HttpServletRequest request, RedirectAttributes redir) {
-        if(paymentId != null) {
-            Map<String, Object> response = payPalClient.completePayment(request);
+    public String register(Model model, @RequestParam(value = "username", required = false) String username,
+                           @RequestParam(value = "paymentId", required = false) String paymentId,
+                           HttpServletRequest request, RedirectAttributes redir) {
+        if(username != null && paymentId != null) {
+            Boss boss = this.bossService.findByEmail(username);
 
-            if(response.containsValue("success") && response.containsKey("payment")) {
-                String appUrl = request.getScheme() + "://" + request.getServerName();
+            if(boss != null) {
+                Map<String, Object> response = payPalClient.completePayment(request);
 
-                /*SimpleMailMessage registrationEmail = this.emailService.createEmail(
-                        boss.getEmail(),
-                        EmailDrafts.USER_REGISTRATION_SUBJECT,
-                        EmailDrafts.USER_REGISTRATION_CONTENT(appUrl, boss.getConfirmationToken()),
-                        EmailDrafts.APP_EMAIL
-                );
+                if(response.containsValue("success") && response.containsKey("payment")) {
+                    String appUrl = request.getScheme() + "://" + request.getServerName();
 
-                try {
-                    emailService.sendEmail(registrationEmail);
-                }catch( Exception e ){
-                    // catch error
-                    logger.info("Error Sending Email: " + e.getMessage());
+                    SimpleMailMessage registrationEmail = this.emailService.createEmail(
+                            boss.getEmail(),
+                            EmailDrafts.USER_REGISTRATION_SUBJECT,
+                            EmailDrafts.USER_REGISTRATION_CONTENT(appUrl, boss.getConfirmationToken()),
+                            EmailDrafts.APP_EMAIL
+                    );
+
+                    try {
+                        emailService.sendEmail(registrationEmail);
+                    }catch( Exception e ){
+                        // catch error
+                        logger.info("Error Sending Email: " + e.getMessage());
+                    }
+
+                    redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));
+
+                    return "redirect:/login";
+                } else {
+                    redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
+                    return "redirect:/register";
                 }
-
-                redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));*/
-
-                return "redirect:/login";
             } else {
-                redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
+                redir.addFlashAttribute("message", NotificationMessages.USER_DOESNT_EXISTS(username));
                 return "redirect:/register";
             }
         }
@@ -134,40 +143,44 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
 
-        /*if(boss.getSubscription() != 0) {
+        if(boss.getSubscription() != 0.0f) {
             String sum = String.valueOf(boss.getSubscription());
 
-            response = payPalClient.createPayment(sum, request);
-        }*/
+            String appUrl = request.getScheme() + "://" + request.getServerName();
 
-        this.bossService.saveBoss(boss);
+            response = payPalClient.createPayment(sum, request, boss.getEmail());
 
-        /*if(response.containsValue("success") && response.containsKey("redirect_url")) {
-            return "redirect:" + response.get("redirect_url");
+            if(response.containsValue("success") && response.containsKey("redirect_url")) {
+                this.bossService.saveBoss(boss);
+
+                return "redirect:" + response.get("redirect_url");
+            } else {
+                redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
+                return "redirect:/register";
+            }
         } else {
-            redir.addFlashAttribute("message", NotificationMessages.PAYPAL_ERROR);
-            return "redirect:/register";
-        }*/
+            this.bossService.saveBoss(boss);
 
-        String appUrl = request.getScheme() + "://" + request.getServerName();
+            String appUrl = request.getScheme() + "://" + request.getServerName();
 
-        SimpleMailMessage registrationEmail = this.emailService.createEmail(
-                boss.getEmail(),
-                EmailDrafts.USER_REGISTRATION_SUBJECT,
-                EmailDrafts.USER_REGISTRATION_CONTENT(appUrl, boss.getConfirmationToken()),
-                EmailDrafts.APP_EMAIL
-        );
+            SimpleMailMessage registrationEmail = this.emailService.createEmail(
+                    boss.getEmail(),
+                    EmailDrafts.USER_REGISTRATION_SUBJECT,
+                    EmailDrafts.USER_REGISTRATION_CONTENT(appUrl, boss.getConfirmationToken()),
+                    EmailDrafts.APP_EMAIL
+            );
 
-        try {
-            emailService.sendEmail(registrationEmail);
-        }catch( Exception e ){
-            // catch error
-            logger.info("Error Sending Email: " + e.getMessage());
+            try {
+                emailService.sendEmail(registrationEmail);
+            }catch( Exception e ){
+                // catch error
+                logger.info("Error Sending Email: " + e.getMessage());
+            }
+
+            redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));
+
+            return "redirect:/";
         }
-
-        redir.addFlashAttribute("message", NotificationMessages.USER_CONFIRMATION_EMAIL_SENT(boss.getEmail()));
-
-        return "redirect:/";
     }
 
     @GetMapping("/confirm")

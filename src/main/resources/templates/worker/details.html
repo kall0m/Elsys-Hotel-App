@@ -1,0 +1,73 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="bg--secondary">
+            <div class="container">
+                <th:block th:if="${message}">
+                    <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
+                        <div class="boxed boxed--sm bg--dark">
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div class="notification-close-cross notification-close"></div>
+                    </div>
+                </th:block>
+
+                <div class="row">
+                    <p>Description:</p>
+                    <h5 th:text="${task.description}"></h5>
+                    <p>Status:</p>
+                    <h5 th:text="${task.status}"></h5>
+                    <p>Type:</p>
+                    <h5 th:text="${task.type.name}"></h5>
+                    <th:block th:if="${task.worker}">
+                        <p>Worker:</p>
+                        <h5 th:text="${task.worker.email}"></h5>
+                    </th:block>
+
+                    <p>Email:</p>
+                    <h5 th:text="${worker.email}"></h5>
+                    <p>Password:</p>
+                    <h5 th:text="${worker.realPassword}"></h5>
+                    <p>Type:</p>
+                    <h5 th:text="${worker.type.name}"></h5>
+                    <label>Busy:</label>
+                    <th:block th:if="${worker.busy}">
+                        <h5>Yes</h5>
+                    </th:block>
+                    <th:block th:unless="${worker.busy}">
+                        <h5>No</h5>
+                    </th:block>
+                    <th:block th:if="${!worker.tasks.isEmpty()}">
+                        <span>Tasks</span>
+                        <th:block th:each="task : ${worker.tasks}">
+                            <div class="col-sm-4 masonry__item" style="display: inline;">
+                                <a th:href="@{/tasks/{id}(id=${task.id})}">
+                                    <div class="boxed bg--white box-shadow">
+                                        <label>Description: </label>
+                                        <h5 th:text="${task.description}"></h5>
+                                        <label>Status: </label>
+                                        <h5 th:text="${task.status}"></h5>
+                                        <label>Type: </label>
+                                        <h5 th:text="${task.type.name}"></h5>
+                                        <th:block th:if="${task.worker}">
+                                            <p>Worker:</p>
+                                            <h5 th:text="${task.worker.email}"></h5>
+                                        </th:block>
+                                    </div>
+                                </a>
+                            </div>
+                        </th:block>
+                    </th:block>
+
+                    <div class="col-sm-12">
+                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}">
+                            <button type="button" class="btn bg--primary">Edit task</button>
+                        </a>
+                        <a th:href="@{/tasks/delete/{id}(id=${task.id})}">
+                            <button type="button" class="btn bg--primary">Delete task</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

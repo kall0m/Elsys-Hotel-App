@@ -54,7 +54,7 @@ public class WorkerController {
     }
 
     @GetMapping("/workers")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String workers(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -96,7 +96,6 @@ public class WorkerController {
     @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String createProcess(RedirectAttributes redir, WorkerBindingModel workerBindingModel) {
         List<String> emails = new ArrayList<>();
-        List<String> names = new ArrayList<>();
         List<String> passwords = new ArrayList<>();
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -117,9 +116,16 @@ public class WorkerController {
         List<Worker> workers = new ArrayList<>();
 
         for(int i = 0; i < workerBindingModel.getCount(); i++) {
+            if(!this.bossService.checkWorkerAccountsCount(boss)) {
+                break;
+            }
+
             emails.add(new String(getRandomString(8)));
 
-            names.add(new String(getRandomString(8)));
+            while(this.workerService.findByEmail(emails.get(i)) != null) {
+                emails.remove(i);
+                emails.add(new String(getRandomString(8)));
+            }
 
             passwords.add(new String(getRandomString(8)));
 
@@ -127,7 +133,7 @@ public class WorkerController {
 
             Worker worker = new Worker(
                     emails.get(i),
-                    names.get(i),
+                    null,
                     bCryptPasswordEncoder.encode(passwords.get(i)),
                     passwords.get(i)
             );
@@ -150,6 +156,30 @@ public class WorkerController {
         redir.addFlashAttribute("message", NotificationMessages.CREATED_WORKERS(workerBindingModel.getCount()));
 
         return "redirect:/workers";
+    }
+
+    @GetMapping("/workers/{id}")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
+    public String details(@PathVariable Integer id, Model model, RedirectAttributes redir) {
+        if(!this.workerService.workerExists(id)) {
+            redir.addFlashAttribute("message", NotificationMessages.WORKER_DOESNT_EXIST);
+            return "redirect:/workers";
+        }
+
+        Worker worker = this.workerService.findWorker(id);
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        if(!boss.getWorkers().contains(worker)) {
+            redir.addFlashAttribute("message", NotificationMessages.WORKER_DOESNT_EXIST);
+            return "redirect:/workers";
+        }
+
+        model.addAttribute("worker", worker);
+        model.addAttribute("view", "worker/details");
+
+        return "base-layout";
     }
 
     @GetMapping("/worker/delete/{id}")

@@ -16,19 +16,28 @@
                         <div class="masonry__container masonry--active">
                             <th:block th:each="worker : ${workers}">
                                 <div class="col-sm-4 masonry__item">
-                                    <div class="boxed bg--white box-shadow">
-                                        <span>Worker</span>
-                                        <label>Email:</label>
-                                        <h5 th:text="${worker.email}"></h5>
-                                        <label>Password:</label>
-                                        <h5 th:text="${worker.realPassword}"></h5>
-                                        <label>Type:</label>
-                                        <h5 th:text="${worker.type.name}"></h5>
-                                        <hr/>
-                                        <a th:href="@{/worker/delete/{id}(id=${worker.id})}">
-                                            <button type="button" class="btn bg--dark">Delete worker</button>
-                                        </a>
-                                    </div>
+                                    <a th:href="@{/workers/{id}(id=${worker.id})}">
+                                        <div class="boxed bg--white box-shadow">
+                                            <span>Worker</span>
+                                            <label>Email:</label>
+                                            <h5 th:text="${worker.email}"></h5>
+                                            <label>Password:</label>
+                                            <h5 th:text="${worker.realPassword}"></h5>
+                                            <label>Type:</label>
+                                            <h5 th:text="${worker.type.name}"></h5>
+                                            <label>Busy:</label>
+                                            <th:block th:if="${worker.busy}">
+                                                <h5>Yes</h5>
+                                            </th:block>
+                                            <th:block th:unless="${worker.busy}">
+                                                <h5>No</h5>
+                                            </th:block>
+                                            <hr/>
+                                            <object><a th:href="@{/worker/delete/{id}(id=${worker.id})}">
+                                                <button type="button" class="btn bg--dark">Delete worker</button>
+                                            </a></object>
+                                        </div>
+                                    </a>
                                 </div>
                             </th:block>
                         </div>

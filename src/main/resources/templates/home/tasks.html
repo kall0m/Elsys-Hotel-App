@@ -21,11 +21,14 @@
                                             <span>Task</span>
                                             <label>Description: </label>
                                             <h5 th:text="${task.description}"></h5>
-                                            <hr/>
                                             <label>Status: </label>
                                             <h5 th:text="${task.status}"></h5>
                                             <label>Type: </label>
                                             <h5 th:text="${task.type.name}"></h5>
+                                            <th:block th:if="${task.worker}">
+                                                <p>Worker:</p>
+                                                <h5 th:text="${task.worker.email}"></h5>
+                                            </th:block>
                                         </div>
                                     </a>
                                 </div>

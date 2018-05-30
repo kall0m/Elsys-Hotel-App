@@ -18,4 +18,16 @@ public final class SubscriptionService {
 
     public static final int SECOND_TYPES_COUNT = 12;
     public static final int SECOND_ACCS_COUNT = 35;
+
+    // PRIVATE //
+    /*
+     The caller references the constants using <tt>NotificationMessages.EMPTY_STRING</tt>,
+     and so on. Thus, the caller should be prevented from constructing objects of
+     this class, by declaring this private constructor.
+     */
+    private SubscriptionService(){
+        //this prevents even the native class from
+        //calling this ctor as well :
+        throw new AssertionError();
+    }
 }

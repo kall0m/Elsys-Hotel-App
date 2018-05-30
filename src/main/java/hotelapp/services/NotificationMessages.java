@@ -33,12 +33,16 @@ public final class NotificationMessages {
 
     public static final String WORKER_SUCCESSFULLY_DELETED = "Worker successfully deleted!";
 
+    public static final String WORKER_TYPE_DOESNT_EQUAL_TASK_TYPE = "You don't have access to that page.";
+
     // TASK MESSAGES
     public static final String TASK_DOESNT_EXIST = "The searched task doesn't exist!";
 
     public static final String TASK_SUCCESSFULLY_CREATED = "Task successfully created!";
 
     public static final String TASK_SUCCESSFULLY_DELETED = "Task successfully deleted!";
+
+    public static final String TASK_EDIT_NOT_ALLOWED = "You can't edit this task because it is already handled by a worker!";
 
     // TYPE MESSAGES
     public static final String TYPE_DOESNT_EXIST = "The searched type doesn't exist!";

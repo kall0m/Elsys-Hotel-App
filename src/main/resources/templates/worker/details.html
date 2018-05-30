@@ -12,24 +12,13 @@
                 </th:block>
 
                 <div class="row">
-                    <p>Description:</p>
-                    <h5 th:text="${task.description}"></h5>
-                    <p>Status:</p>
-                    <h5 th:text="${task.status}"></h5>
-                    <p>Type:</p>
-                    <h5 th:text="${task.type.name}"></h5>
-                    <th:block th:if="${task.worker}">
-                        <p>Worker:</p>
-                        <h5 th:text="${task.worker.email}"></h5>
-                    </th:block>
-
                     <p>Email:</p>
                     <h5 th:text="${worker.email}"></h5>
                     <p>Password:</p>
                     <h5 th:text="${worker.realPassword}"></h5>
                     <p>Type:</p>
                     <h5 th:text="${worker.type.name}"></h5>
-                    <label>Busy:</label>
+                    <p>Busy:</p>
                     <th:block th:if="${worker.busy}">
                         <h5>Yes</h5>
                     </th:block>
@@ -37,7 +26,7 @@
                         <h5>No</h5>
                     </th:block>
                     <th:block th:if="${!worker.tasks.isEmpty()}">
-                        <span>Tasks</span>
+                        <p>Tasks:</p>
                         <th:block th:each="task : ${worker.tasks}">
                             <div class="col-sm-4 masonry__item" style="display: inline;">
                                 <a th:href="@{/tasks/{id}(id=${task.id})}">
@@ -59,11 +48,8 @@
                     </th:block>
 
                     <div class="col-sm-12">
-                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}">
-                            <button type="button" class="btn bg--primary">Edit task</button>
-                        </a>
-                        <a th:href="@{/tasks/delete/{id}(id=${task.id})}">
-                            <button type="button" class="btn bg--primary">Delete task</button>
+                        <a th:href="@{/worker/delete/{id}(id=${worker.id})}">
+                            <button type="button" class="btn bg--dark">Delete worker</button>
                         </a>
                     </div>
                 </div>

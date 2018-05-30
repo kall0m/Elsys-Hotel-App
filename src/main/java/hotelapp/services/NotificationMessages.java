@@ -10,6 +10,8 @@ public final class NotificationMessages {
 
     public static final String MAXIMAL_TYPES_COUNT_LIMIT_REACHED = "Maximal types count limit reached. Please update subscription.";
 
+    public static final String CREATED_WORKER = "Created 1 worker.";
+
     public static final String CREATED_WORKERS(int count) {
         return "Created " + count + " workers.";
     }

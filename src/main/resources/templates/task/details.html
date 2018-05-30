@@ -20,7 +20,11 @@
                     <h5 th:text="${task.type.name}"></h5>
                     <th:block th:if="${task.worker}">
                         <p>Worker:</p>
-                        <h5 th:text="${task.worker.email}"></h5>
+                        <object>
+                            <a th:href="@{/workers/{id}(id=${task.worker.id})}">
+                                <h5 th:text="${task.worker.email}"></h5>
+                            </a>
+                        </object>
                     </th:block>
 
                     <div class="col-sm-12">

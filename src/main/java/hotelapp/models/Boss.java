@@ -83,6 +83,10 @@ public class Boss extends User {
         this.workers = workers;
     }
 
+    public void addWorker(Worker worker) {
+        this.workers.add(worker);
+    }
+
     @OrderBy("name ASC")
     @OneToMany(mappedBy = "boss")
     public Set<Type> getTypes() {

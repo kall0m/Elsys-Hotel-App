@@ -30,6 +30,13 @@ public class HomeController {
         model.addAttribute("view", "home/about");
         return "base-layout";
     }
+
+    @GetMapping("/terms")
+    public String terms(Model model)
+    {
+        model.addAttribute("view", "home/terms");
+        return "base-layout";
+    }
 }
 
 

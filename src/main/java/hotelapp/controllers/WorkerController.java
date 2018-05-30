@@ -154,7 +154,11 @@ public class WorkerController {
 
         redir.addFlashAttribute("workers", workers);
 
-        redir.addFlashAttribute("message", NotificationMessages.CREATED_WORKERS(workerBindingModel.getCount()));
+        if(workers.size() == 1) {
+            redir.addFlashAttribute("message", NotificationMessages.CREATED_WORKER);
+        } else if(workers.size() > 1){
+            redir.addFlashAttribute("message", NotificationMessages.CREATED_WORKERS(workers.size()));
+        }
 
         return "redirect:/workers";
     }

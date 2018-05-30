@@ -103,11 +103,25 @@ public class TaskController {
         Task task = this.taskService.findTask(id);
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Boss boss = this.bossService.findByEmail(principal.getUsername());
 
-        if(!boss.getTasks().contains(task)) {
-            redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
-            return "redirect:/tasks";
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+        Worker worker = this.workerService.findByEmail(principal.getUsername());
+
+        if(boss != null) {
+            if(!boss.getTasks().contains(task)) {
+                redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+                return "redirect:/tasks";
+            }
+        } else if(worker != null) {
+            if(!worker.getBoss().getTasks().contains(task)) {
+                redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+                return "redirect:/tasks";
+            }
+
+            if(!worker.getType().equals(task.getType())) {
+                redir.addFlashAttribute("message", NotificationMessages.WORKER_TYPE_DOESNT_EQUAL_TASK_TYPE);
+                return "redirect:/tasks";
+            }
         }
 
         model.addAttribute("task", task);
@@ -134,6 +148,11 @@ public class TaskController {
             return "redirect:/tasks";
         }
 
+        if(!task.getStatus().equals(TaskStatus.TODO)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_EDIT_NOT_ALLOWED);
+            return "redirect:/tasks";
+        }
+
         model.addAttribute("task", task);
         model.addAttribute("types", boss.getTypes());
         model.addAttribute("view", "task/edit");
@@ -156,6 +175,11 @@ public class TaskController {
 
         if(!boss.getTasks().contains(currentTask)) {
             redir.addFlashAttribute("message", NotificationMessages.TASK_DOESNT_EXIST);
+            return "redirect:/tasks";
+        }
+
+        if(!currentTask.getStatus().equals(TaskStatus.TODO)) {
+            redir.addFlashAttribute("message", NotificationMessages.TASK_EDIT_NOT_ALLOWED);
             return "redirect:/tasks";
         }
 

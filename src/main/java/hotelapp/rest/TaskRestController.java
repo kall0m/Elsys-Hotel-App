@@ -83,13 +83,19 @@ public class TaskRestController {
             if(!boss.getTasks().contains(task)) {
                 LOGGER.error("Task with id {} not found.", id);
                 return new ResponseEntity(new CustomErrorType("Task with id " + id
-                        + " not found"), HttpStatus.NOT_FOUND);
+                        + " not found."), HttpStatus.NOT_FOUND);
             }
         } else if(worker != null) {
             if(!worker.getBoss().getTasks().contains(task)) {
                 LOGGER.error("Task with id {} not found.", id);
                 return new ResponseEntity(new CustomErrorType("Task with id " + id
-                        + " not found"), HttpStatus.NOT_FOUND);
+                        + " not found."), HttpStatus.NOT_FOUND);
+            }
+
+            if(!worker.getType().equals(task.getType())) {
+                LOGGER.error("Type of Task with id {} doesn't match with Worker type.", id);
+                return new ResponseEntity(new CustomErrorType("Type of Task with id " + id
+                        + " doesn't match with Worker type."), HttpStatus.NOT_FOUND);
             }
         }
 
@@ -183,6 +189,12 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
+        if(!currentTask.getStatus().equals(TaskStatus.TODO)) {
+            LOGGER.error("Unable to update. Boss can't edit Task with id {} because it is already handled by Worker.", id);
+            return new ResponseEntity(new CustomErrorType("Unable to update. Boss can't edit Task with id " + id + " because it is already handled by Worker."),
+                    HttpStatus.NOT_FOUND);
+        }
+
         if(task.getDescription() != null) {
             currentTask.setDescription(task.getDescription());
         }
@@ -253,7 +265,19 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        task.setStatus("Doing");
+        if(!worker.getType().equals(task.getType())) {
+            LOGGER.error("Type of Task with id {} doesn't match with Worker type.", id);
+            return new ResponseEntity(new CustomErrorType("Type of Task with id " + id
+                    + " doesn't match with Worker type."), HttpStatus.NOT_FOUND);
+        }
+
+        if(task.getStatus().equals(TaskStatus.DOING) || task.getStatus().equals(TaskStatus.DONE)) {
+            LOGGER.error("Task with id {} is already handled by Worker.", id);
+            return new ResponseEntity(new CustomErrorType("Task with id " + id
+                    + " is already handled by Worker."), HttpStatus.NOT_FOUND);
+        }
+
+        task.setStatus(TaskStatus.DOING);
         task.setWorker(worker);
 
         worker.addTask(task);
@@ -293,7 +317,13 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        task.setStatus("To do");
+        if(!worker.getType().equals(task.getType())) {
+            LOGGER.error("Type of Task with id {} doesn't match with Worker type.", id);
+            return new ResponseEntity(new CustomErrorType("Type of Task with id " + id
+                    + " doesn't match with Worker type."), HttpStatus.NOT_FOUND);
+        }
+
+        task.setStatus(TaskStatus.TODO);
         task.setWorker(null);
 
         worker.removeTask(task);
@@ -333,7 +363,13 @@ public class TaskRestController {
                     HttpStatus.NOT_FOUND);
         }
 
-        task.setStatus("Done");
+        if(!worker.getType().equals(task.getType())) {
+            LOGGER.error("Type of Task with id {} doesn't match with Worker type.", id);
+            return new ResponseEntity(new CustomErrorType("Type of Task with id " + id
+                    + " doesn't match with Worker type."), HttpStatus.NOT_FOUND);
+        }
+
+        task.setStatus(TaskStatus.DONE);
 
         this.taskService.saveTask(task);
 

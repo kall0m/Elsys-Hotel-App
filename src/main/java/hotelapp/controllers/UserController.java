@@ -4,6 +4,7 @@ import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
 import hotelapp.bindingModels.ForgotPasswordBindingModel;
 import hotelapp.bindingModels.SetNewPasswordBindingModel;
+import hotelapp.bindingModels.UserAccountBindingModel;
 import hotelapp.bindingModels.UserBindingModel;
 import hotelapp.models.Boss;
 import hotelapp.models.Role;
@@ -13,10 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -319,5 +323,110 @@ public class UserController {
         redir.addFlashAttribute("message", NotificationMessages.CHANGES_SAVED);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
+    public String profilePage(Model model) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        model.addAttribute("boss", boss);
+        model.addAttribute("view", "user/profile");
+
+        return "base-layout";
+    }
+
+    @GetMapping("/profile/settings")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
+    public String profileAdminSettings(Model model) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        model.addAttribute("boss", boss);
+        model.addAttribute("view", "user/settings");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/profile/settings")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
+    public String profileAdminSettingsProcess(UserAccountBindingModel userAccountBindingModel, RedirectAttributes redir, HttpServletRequest request) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boss boss = this.bossService.findByEmail(principal.getUsername());
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        if(userAccountBindingModel.getEmail().equals(boss.getEmail()) &&
+                bCryptPasswordEncoder.matches(userAccountBindingModel.getPassword(), boss.getPassword())) {
+            return "redirect:/profile";
+        }
+
+        if(!(userAccountBindingModel.getEmail().equals(boss.getEmail())) && this.userService.findByEmail(userAccountBindingModel.getEmail()) != null) {
+            redir.addFlashAttribute("message", NotificationMessages.USER_ALREADY_EXISTS);
+
+            return "redirect:/profile/settings";
+        }
+
+        if(!bCryptPasswordEncoder.matches(userAccountBindingModel.getOldPassword(), boss.getPassword())) {
+            redir.addFlashAttribute("message", NotificationMessages.PASSWORDS_DONT_MATCH);
+
+            return "redirect:/profile/settings";
+        }
+
+        if(!userAccountBindingModel.getPassword().equals(userAccountBindingModel.getConfirmPassword())) {
+            redir.addFlashAttribute("message", NotificationMessages.PASSWORDS_DONT_MATCH);
+
+            return "redirect:/profile/settings";
+        }
+
+        Zxcvbn passwordCheck = new Zxcvbn();
+
+        Strength strength = passwordCheck.measure(userAccountBindingModel.getPassword());
+
+        if (strength.getScore() < 2) {
+            redir.addFlashAttribute("message", NotificationMessages.PASSWORD_TOO_WEAK);
+
+            return "redirect:/profile/settings";
+        }
+
+        if(!(userAccountBindingModel.getEmail().equals(boss.getEmail()))) {
+            // Disable user until they click on confirmation link in email
+            boss.setEnabled(false);
+
+            // Generate random 36-character string token for confirmation link
+            boss.setConfirmationToken(UUID.randomUUID().toString());
+        }
+        String previousEmail = boss.getEmail();
+        boss.setEmail(userAccountBindingModel.getEmail());
+        boss.setPassword(bCryptPasswordEncoder.encode(userAccountBindingModel.getPassword()));
+        boss.setHotelName(userAccountBindingModel.getHotelName());
+
+        this.bossService.saveBoss(boss);
+
+        if(!(userAccountBindingModel.getEmail().equals(previousEmail))) {
+            String appUrl = request.getScheme() + "://" + request.getServerName();
+
+            SimpleMailMessage registrationEmail = this.emailService.createEmail(
+                    boss.getEmail(),
+                    EmailDrafts.USER_CHANGE_EMAIL_ADDRESS_SUBJECT,
+                    EmailDrafts.USER_CHANGE_EMAIL_ADDRESS_CONTENT(appUrl, boss.getConfirmationToken()),
+                    EmailDrafts.APP_EMAIL
+            );
+
+            try {
+                emailService.sendEmail(registrationEmail);
+            }catch( Exception e ){
+                // catch error
+                logger.info("Error Sending Email: " + e.getMessage());
+            }
+        }
+
+        Authentication authentication = new PreAuthenticatedAuthenticationToken(boss, boss.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        redir.addFlashAttribute("message", NotificationMessages.CHANGES_SAVED);
+
+        return "redirect:/profile";
     }
 }

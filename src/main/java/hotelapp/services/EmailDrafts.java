@@ -12,6 +12,12 @@ public final class EmailDrafts {
         return "To confirm your email address, please click the link below:\n" + appUrl + "/confirm?token=" + confirmationToken + "\n\n" + EMAIL_CLOSING;
     }
 
+    // USER CHANGE EMAIL ADDRESS
+    public static final String USER_CHANGE_EMAIL_ADDRESS_SUBJECT = APP_NAME + " - Changed Email Address";
+    public static final String USER_CHANGE_EMAIL_ADDRESS_CONTENT(String appUrl, String confirmationToken) {
+        return "Your email address has been changed. To confirm your new email address, please click the link below:\n" + appUrl + "/confirm?token=" + confirmationToken + "\n\n" + EMAIL_CLOSING;
+    }
+
     // USER FORGOT PASSWORD
     public static final String USER_FORGOT_PASSWORD_SUBJECT = APP_NAME + " - Password Recovery";
     public static final String USER_FORGOT_PASSWORD_CONTENT(String appUrl, String forgotPasswordToken) {

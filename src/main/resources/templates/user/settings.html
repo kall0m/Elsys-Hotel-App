@@ -1,0 +1,83 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="height-100 cover cover-8">
+            <div class="col-md-7 col-sm-5">
+                <div class="background-image-holder">
+                    <img alt="image" src="/img/form-bg.jpg"/>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-7 bg--white text-center">
+                <div class="pos-vertical-center">
+                    <!--<img class="logo" alt="Pillar" src="/img/logo3.jpg" style="width: 450px !important; height: 324.5px !important;"/>-->
+                    <p class="lead">
+                        Register
+                    </p>
+                    <div class="text-left">
+                        <form method="post" th:action="@{/profile/settings}">
+                            <th:block th:if="${message}">
+                                <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
+                                    <div class="boxed boxed--sm bg--dark">
+                                        <span th:text="${message}"></span>
+                                    </div>
+                                    <div class="notification-close-cross notification-close"></div>
+                                </div>
+                            </th:block>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Hotel Name:</label>
+                                        <i class="icon icon-Hotel"></i>
+                                        <input type="text" name="hotelName" placeholder="Hotel Name" th:value="${boss.hotelName}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Email Address:</label>
+                                        <i class="icon icon-Mail-2"></i>
+                                        <input type="email" name="email" placeholder="you@yourwebsite.com" th:value="${boss.email}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Old Password:</label>
+                                        <i class="icon icon-Security-Check"></i>
+                                        <input type="password" name="oldPassword" placeholder="••••••••••••"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>New Password:</label>
+                                        <i class="icon icon-Security-Check"></i>
+                                        <input type="password" name="password" placeholder="••••••••••••"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="input-with-icon">
+                                        <label>Confirm Password:</label>
+                                        <i class="icon icon-Security-Check"></i>
+                                        <input type="password" name="confirmPassword" placeholder="••••••••••••"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn--primary vpe" onClick="return checker();">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

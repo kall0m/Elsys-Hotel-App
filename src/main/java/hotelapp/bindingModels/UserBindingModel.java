@@ -7,7 +7,7 @@ public class UserBindingModel {
     private String email;
 
     @NotNull
-    private String fullName;
+    private String hotelName;
 
     @NotNull
     private String password;
@@ -26,12 +26,12 @@ public class UserBindingModel {
         this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getPassword() {

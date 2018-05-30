@@ -2,6 +2,7 @@ package hotelapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -14,13 +15,14 @@ import java.util.Set;
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "userId")
 public class User {
+    @JsonProperty("userId")
     private Integer id;
 
     private String email;
 
-    private String fullName;
+    private String hotelName;
 
     @JsonIgnore
     private String password;
@@ -40,9 +42,9 @@ public class User {
     @JsonIgnore
     private Set<Role> roles;
 
-    public User(String email, String fullName, String password) {
+    public User(String email, String hotelName, String password) {
         this.email = email;
-        this.fullName = fullName;
+        this.hotelName = hotelName;
         this.password = password;
 
         this.roles = new HashSet<>();
@@ -69,13 +71,13 @@ public class User {
         this.email = email;
     }
 
-    @Column(name = "fullName", nullable = false)
-    public String getFullName() {
-        return fullName;
+    @Column(name = "hotelName")
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     @Column(name = "password", length = 60, nullable = false)
@@ -147,7 +149,7 @@ public class User {
         if (enabled != user.enabled) return false;
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (fullName != null ? !fullName.equals(user.fullName) : user.fullName != null) return false;
+        if (hotelName != null ? !hotelName.equals(user.hotelName) : user.hotelName != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (confirmationToken != null ? !confirmationToken.equals(user.confirmationToken) : user.confirmationToken != null)
             return false;
@@ -160,7 +162,7 @@ public class User {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (hotelName != null ? hotelName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + (confirmationToken != null ? confirmationToken.hashCode() : 0);

@@ -18,14 +18,14 @@ public class AppUserDetails extends User implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public AppUserDetails(User user, ArrayList<String> roles) {
-        super(user.getEmail(), user.getFullName(), user.getPassword());
+        super(user.getEmail(), user.getHotelName(), user.getPassword());
 
         this.roles = roles;
         this.user = user;
     }
 
     public AppUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getEmail(), user.getFullName(), user.getPassword());
+        super(user.getEmail(), user.getHotelName(), user.getPassword());
 
         this.authorities = authorities;
         this.user = user;

@@ -32,7 +32,7 @@ public class TypeController {
     private TypeService typeService;
 
     @GetMapping("/types")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('ROLE_BOSS')")
     public String types(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

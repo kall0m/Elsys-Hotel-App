@@ -1,10 +1,7 @@
 package hotelapp.controllers;
 
 import hotelapp.bindingModels.WorkerBindingModel;
-import hotelapp.models.Boss;
-import hotelapp.models.Role;
-import hotelapp.models.Type;
-import hotelapp.models.Worker;
+import hotelapp.models.*;
 import hotelapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +29,8 @@ public class WorkerController {
     private RoleService roleService;
     @Autowired
     private TypeService typeService;
+    @Autowired
+    private TaskService taskService;
 
     private static String getRandomString(int length) {
         StringBuilder alphanumeric = new StringBuilder();
@@ -216,6 +215,17 @@ public class WorkerController {
         }
 
         Worker worker = this.workerService.findWorker(id);
+
+        if(!worker.getTasks().isEmpty()) {
+            for(Task task : worker.getTasks()) {
+                if(task.getStatus().equals(TaskStatus.DOING)) {
+                    task.setStatus(TaskStatus.TODO);
+                    task.setWorker(null);
+                } else if(task.getStatus().equals(TaskStatus.DONE)) {
+                    this.taskService.deleteTask(task);
+                }
+            }
+        }
 
         this.workerService.deleteWorker(worker);
 

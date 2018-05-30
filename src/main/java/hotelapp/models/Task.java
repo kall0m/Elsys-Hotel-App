@@ -1,7 +1,10 @@
 package hotelapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import hotelapp.services.TaskStatus;
 
 import javax.persistence.*;
 
@@ -9,23 +12,26 @@ import javax.persistence.*;
 @Table(name = "tasks")
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "taskId")
 public class Task {
+    @JsonProperty("taskId")
     private Integer id;
 
     private String description;
 
     private String status;
 
+    @JsonIgnore
     private Boss assignor;
 
     private Worker worker;
 
+    @JsonProperty("taskType")
     private Type type;
 
     public Task() {
         this.description = "";
-        this.status = "To do";
+        this.status = TaskStatus.TODO;
         this.assignor = null;
         this.worker = null;
         this.type = null;
@@ -33,7 +39,7 @@ public class Task {
 
     public Task(String description) {
         this.description = description;
-        this.status = "To do";
+        this.status = TaskStatus.TODO;
     }
 
     @Id

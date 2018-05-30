@@ -9,10 +9,7 @@ import java.util.stream.Collectors;
 
 @XmlRootElement
 @Entity
-@DiscriminatorValue("1")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@DiscriminatorValue("0")
 public class Boss extends User {
     @JsonIgnore
     private Set<Task> tasks;
@@ -26,8 +23,8 @@ public class Boss extends User {
     @JsonIgnore
     private Set<Type> types;
 
-    public Boss(String email, String fullName, String password, double subscription) {
-        super(email, fullName, password);
+    public Boss(String email, String hotelName, String password, double subscription) {
+        super(email, hotelName, password);
         this.tasks = new TreeSet<>(new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) { //TODO

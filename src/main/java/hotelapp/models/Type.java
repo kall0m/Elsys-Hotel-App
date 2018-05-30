@@ -1,6 +1,9 @@
 package hotelapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Comparator;
@@ -9,7 +12,11 @@ import java.util.TreeSet;
 
 @Entity
 @Table(name = "typeWorkersTask")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "typeId")
 public class Type {
+    @JsonProperty("typeId")
     private Integer id;
 
     private String name;
@@ -20,6 +27,7 @@ public class Type {
     @JsonIgnore
     private Set<Task> tasks;
 
+    @JsonIgnore
     private Boss boss;
 
     public Type() {

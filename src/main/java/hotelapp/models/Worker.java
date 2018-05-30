@@ -8,16 +8,15 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Entity
-@DiscriminatorValue("2")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@DiscriminatorValue("1")
 public class Worker extends User {
     @JsonIgnore
     private Set<Task> tasks;
 
+    @JsonIgnore
     private Boss boss;
 
+    @JsonProperty("workerType")
     private Type type;
 
     @JsonIgnore
@@ -25,8 +24,8 @@ public class Worker extends User {
 
     private boolean busy;
 
-    public Worker(String email, String fullName, String password, String realPassword) {
-        super(email, fullName, password);
+    public Worker(String email, String hotelName, String password, String realPassword) {
+        super(email, hotelName, password);
         this.tasks = new TreeSet<>(new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) { //TODO
@@ -70,7 +69,7 @@ public class Worker extends User {
     }
 
     @ManyToOne()
-    @JoinColumn(name = "typeWorkerId")
+    @JoinColumn(name = "typeId")
     public Type getType() {
         return type;
     }

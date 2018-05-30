@@ -149,6 +149,7 @@ public class WorkerController {
             this.workerService.saveWorker(worker);
 
             workers.add(worker);
+            boss.addWorker(worker);
         }
 
         redir.addFlashAttribute("workers", workers);

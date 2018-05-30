@@ -159,7 +159,8 @@ public class TaskRestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/task/{id}").buildAndExpand(task.getId()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<Task>(task, HttpStatus.CREATED);
+        //return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     // -------------------Update a Task------------------------------------------------

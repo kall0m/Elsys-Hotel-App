@@ -1,0 +1,44 @@
+<main th:remove="tag">
+    <div class="main-container">
+        <section class="bg--secondary">
+            <div class="container">
+                <th:block th:if="${message}">
+                    <div id="message" class="notification pos-right pos-top col-sm-6 col-md-4 col-xs-12 growl-notice notification--reveal" data-animation="from-right" data-notification-link="growl" style="top: 40px;">
+                        <div class="boxed boxed--sm bg--dark">
+                            <span th:text="${message}"></span>
+                        </div>
+                        <div class="notification-close-cross notification-close"></div>
+                    </div>
+                </th:block>
+
+                <div class="row">
+                    <p>Hotel name:</p>
+                    <h5 th:text="${boss.hotelName}"></h5>
+
+                    <p>Email:</p>
+                    <h5 th:text="${boss.email}"></h5>
+                    <th:block th:if="${boss.enabled}">
+                        <h5 style="color: green;">Enabled</h5>
+                    </th:block>
+                    <th:block th:unless="${boss.subscription == 0.0f}">
+                        <h5 style="color: red;">Not Enabled</h5>
+                    </th:block>
+
+                    <p>Subscription:</p>
+                    <th:block th:if="${boss.subscription == 0.0f}">
+                        <h5>Free</h5>
+                    </th:block>
+                    <th:block th:unless="${boss.subscription == 0.0f}">
+                        <h5 th:text="${boss.subscription}"></h5>
+                    </th:block>
+
+                    <div class="col-sm-12">
+                        <a th:href="@{/profile/settings}">
+                            <button type="button" class="btn bg--primary">Settings</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>

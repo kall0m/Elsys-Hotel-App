@@ -31,10 +31,24 @@ public class HomeController {
         return "base-layout";
     }
 
+    @GetMapping("/mobile-app")
+    public String mobileApp(Model model)
+    {
+        model.addAttribute("view", "home/mobile-app");
+        return "base-layout";
+    }
+
     @GetMapping("/terms")
     public String terms(Model model)
     {
         model.addAttribute("view", "home/terms");
+        return "base-layout";
+    }
+
+    @GetMapping("/contact")
+    public String contactUs(Model model)
+    {
+        model.addAttribute("view", "home/contact");
         return "base-layout";
     }
 }

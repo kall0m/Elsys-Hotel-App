@@ -20,17 +20,29 @@
                     </div>
                     <div class="nav-module menu-module left">
                         <ul class="menu">
-                            <li>
-                                <a th:href="@{/about}">About</a>
-                            </li>
                             <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/tasks}">Tasks</a>
                             </li>
-                            <li sec:authorize="isAuthenticated()">
+                            <li sec:authorize="hasAuthority('ROLE_BOSS')">
                                 <a th:href="@{/workers}">Workers</a>
                             </li>
-                            <li sec:authorize="isAuthenticated()">
+                            <li sec:authorize="hasAuthority('ROLE_BOSS')">
                                 <a th:href="@{/types}">Types</a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ROLE_BOSS')">
+                                <a th:href="@{/profile}">Profile</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/about}">About</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/mobile-app}">Mobile App</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/terms}">Terms of Use</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/contact}">Contact</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
                                 <a th:href="@{/logout}">Logout</a>
